@@ -1,5 +1,8 @@
 #include <cassert>
+#include <unistd.h>
 #include "backend.h"
+
+using namespace libmodbus_cpp;
 
 AbstractBackend::AbstractBackend(modbus_t *ctx) :
     m_ctx(ctx)
@@ -35,9 +38,9 @@ bool AbstractBackend::initRegisterMap(int holdingRegistersCount, int inputRegist
     return initMap(0, 0, holdingRegistersCount, inputRegistersCount);
 }
 
-void AbstractBackend::connect()
+bool AbstractBackend::connect()
 {
-    modbus_connect(m_ctx);
+    return !modbus_connect(m_ctx);
 }
 
 void AbstractBackend::disconnect()
@@ -56,8 +59,31 @@ TcpBackend::TcpBackend(const char *address, int port) :
 {
 }
 
+TcpBackend::~TcpBackend()
+{
+    if (m_socket != -1)
+        close(m_socket);
+}
+
 bool TcpBackend::startListen(int maxConnectionCount)
 {
     m_socket = modbus_tcp_listen(m_ctx, maxConnectionCount);
+    if (m_socket)
+        modbus_tcp_accept(m_ctx, &m_socket);
     return (m_socket != -1);
+}
+
+void TcpBackend::setMaxConnectionCount(int value)
+{
+    m_maxConnectionCount = value;
+}
+
+bool TcpBackend::runAsSlave()
+{
+    return startListen(m_maxConnectionCount);
+}
+
+bool TcpBackend::runAsMaster()
+{
+    return false;
 }

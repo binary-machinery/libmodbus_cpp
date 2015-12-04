@@ -1,6 +1,8 @@
 #include <assert.h>
 #include "libmodbus_cpp.h"
 
+using namespace libmodbus_cpp;
+
 Libmodbus_cpp::Libmodbus_cpp(AbstractBackend *backend) :
     m_backend(backend)
 {
@@ -9,6 +11,7 @@ Libmodbus_cpp::Libmodbus_cpp(AbstractBackend *backend) :
 
 Libmodbus_cpp::~Libmodbus_cpp()
 {
+    delete m_backend;
 }
 
 bool Libmodbus_cpp::initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount)
@@ -21,12 +24,12 @@ bool Libmodbus_cpp::initRegisterMap(int holdingRegistersCount, int inputRegister
     return getBackend()->initMap(0, 0, holdingRegistersCount, inputRegistersCount);
 }
 
-void Libmodbus_cpp::connect()
-{
-    getBackend()->connect();
-}
+//void Libmodbus_cpp::connect()
+//{
+//    getBackend()->connect();
+//}
 
-void Libmodbus_cpp::disconnect()
-{
-    getBackend()->disconnect();
-}
+//void Libmodbus_cpp::disconnect()
+//{
+//    getBackend()->disconnect();
+//}

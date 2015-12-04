@@ -6,6 +6,8 @@
 #include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
 
+namespace libmodbus_cpp {
+
 template<typename T>
 inline uint16_t extractRegisterFromValue(int idx, const T &value) {
     return (uint16_t)(value << 16 * idx);
@@ -13,7 +15,7 @@ inline uint16_t extractRegisterFromValue(int idx, const T &value) {
 
 template<typename T>
 inline uint16_t extractRegisterFromValue_unsafe(int idx, const T &value) {
-    return *(reinterpret_cast<uint16_t*>(value) + idx);
+    return *(static_cast<uint16_t*>(&value) + idx);
 }
 
 template<typename T>
@@ -23,7 +25,7 @@ inline void insertRegisterIntoValue(int idx, T &value, uint16_t reg) {
 
 template<typename T>
 inline void insertRegisterIntoValue_unsafe(int idx, T &value, uint16_t reg) {
-    *(reinterpret_cast<uint16_t*>(value) + idx) = reg;
+    *(static_cast<uint16_t*>(&value) + idx) = reg;
 }
 
 
@@ -42,14 +44,14 @@ public:
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool initRegisterMap(int holdingRegistersCount, int inputRegistersCount);
 
-    virtual void connect();
+    virtual bool connect();
     virtual void disconnect();
 
     template<typename TableType, typename DataType>
     bool setValueToTable(TableType *table, uint16_t address, DataType value) {
         int regCount = sizeof(value) / sizeof(*table);
         for (int i = 0; i < regCount; ++i)
-            table[address + i] = extractRegisterFromValue(i, value);
+            table[address + i] = extractRegisterFromValue_unsafe(i, value);
         return true;
     }
 
@@ -58,7 +60,7 @@ public:
         DataType res(0);
         int regCount = sizeof(DataType) / sizeof(*table);
         for (int i = 0; i < regCount; ++i)
-            insertRegisterIntoValue(i, res, table[address + i]);
+            insertRegisterIntoValue_unsafe(i, res, table[address + i]);
         return res;
     }
 };
@@ -76,9 +78,18 @@ public:
 
 class TcpBackend : public AbstractBackend {
     int m_socket = -1;
+    int m_maxConnectionCount = 1;
 public:
-    TcpBackend(const char *address = NULL, int port = 502); // NULL for server to listen all
+    TcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
+    ~TcpBackend();
     bool startListen(int maxConnectionCount = 1);
+
+    void setMaxConnectionCount(int value);
+
+    bool runAsSlave();
+    bool runAsMaster();
 };
+
+}
 
 #endif // BACKEND_H

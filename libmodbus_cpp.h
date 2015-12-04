@@ -2,14 +2,19 @@
 #define LIBMODBUS_CPP_H
 
 #include <QObject>
+#include <QSharedPointer>
 #include "backend.h"
 
-class Libmodbus_cpp_impl;
+namespace libmodbus_cpp {
 
 class Libmodbus_cpp : public QObject
 {
     Q_OBJECT
 
+public:
+    typedef QSharedPointer<Libmodbus_cpp> SharedPtr;
+
+private:
     AbstractBackend *m_backend = Q_NULLPTR;
 
 protected:
@@ -22,8 +27,8 @@ public:
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool initRegisterMap(int holdingRegistersCount, int inputRegistersCount);
 
-    virtual void connect(); // no conflicts with QObject::connect(...)
-    virtual void disconnect(); // no conflicts with QObject::disconnect(...)
+//    virtual void connect(); // no conflicts with QObject::connect(...)
+//    virtual void disconnect(); // no conflicts with QObject::disconnect(...)
 
     template<typename T>
     bool setValueToHoldingRegister(uint16_t address, T value) {
@@ -41,6 +46,8 @@ public:
         return getBackend()->setValueToTable(map->tab_input_registers, address, value);
     }
 };
+
+}
 
 #endif // LIBMODBUS_CPP_H
 
