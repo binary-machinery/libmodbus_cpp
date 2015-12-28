@@ -12,14 +12,12 @@ TEMPLATE = lib
 CONFIG += c++11
 
 SOURCES += \
-    libmodbus_cpp.cpp \
     backend.cpp \
     slave_tcp.cpp \
     master_tcp.cpp
 
 HEADERS += \
     backend.h \
-    libmodbus_cpp.h \
     slave_tcp.h \
     master_tcp.h
 
