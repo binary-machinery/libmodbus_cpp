@@ -14,12 +14,12 @@ class SlaveTcp : public AbstractSlave
     Q_OBJECT
 
 public:
-    SlaveTcp(TcpBackend *backend);
+    SlaveTcp(BackendTcp *backend);
     ~SlaveTcp();
 
 protected:
-    inline TcpBackend *getBackend() override {
-        return static_cast<TcpBackend*>(AbstractSlave::getBackend());
+    inline BackendTcp *getBackend() override {
+        return static_cast<BackendTcp*>(AbstractSlave::getBackend());
     }
 };
 

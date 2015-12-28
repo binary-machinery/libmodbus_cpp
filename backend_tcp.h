@@ -8,13 +8,13 @@
 
 namespace libmodbus_cpp {
 
-class TcpBackend : public AbstractBackend {
+class BackendTcp : public AbstractBackend {
     Q_OBJECT
     QTcpServer m_tcpServer;
     QSet<QTcpSocket*> m_sockets;
 public:
-    TcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
-    ~TcpBackend();
+    BackendTcp(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
+    ~BackendTcp();
 
     bool startListen(int maxConnectionCount = 1);
 

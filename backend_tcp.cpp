@@ -1,41 +1,41 @@
 #include <unistd.h>
 #include "backend_tcp.h"
 
-libmodbus_cpp::TcpBackend::TcpBackend(const char *address, int port) :
+libmodbus_cpp::BackendTcp::BackendTcp(const char *address, int port) :
     AbstractBackend(modbus_new_tcp(address, port))
 {
 }
 
-libmodbus_cpp::TcpBackend::~TcpBackend()
+libmodbus_cpp::BackendTcp::~BackendTcp()
 {
     m_tcpServer.close();
 }
 
-bool libmodbus_cpp::TcpBackend::startListen(int maxConnectionCount)
+bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)
 {
     int serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
     if (serverSocket != -1) {
         modbus_tcp_accept(getCtx(), &serverSocket);
         m_tcpServer.setSocketDescriptor(serverSocket);
-        connect(&m_tcpServer, &QTcpServer::newConnection, this, &TcpBackend::slot_processConnection);
+        connect(&m_tcpServer, &QTcpServer::newConnection, this, &BackendTcp::slot_processConnection);
         return true;
     }
     return false;
 }
 
-void libmodbus_cpp::TcpBackend::slot_processConnection()
+void libmodbus_cpp::BackendTcp::slot_processConnection()
 {
     while (m_tcpServer.hasPendingConnections()) {
         QTcpSocket *s = m_tcpServer.nextPendingConnection();
         if (!s)
             continue;
-        connect(s, &QTcpSocket::readyRead, this, &TcpBackend::slot_readFromSocket);
-        connect(s, &QTcpSocket::disconnected, this, &TcpBackend::slot_removeSocket);
+        connect(s, &QTcpSocket::readyRead, this, &BackendTcp::slot_readFromSocket);
+        connect(s, &QTcpSocket::disconnected, this, &BackendTcp::slot_removeSocket);
         m_sockets.insert(s);
     }
 }
 
-void libmodbus_cpp::TcpBackend::slot_readFromSocket()
+void libmodbus_cpp::BackendTcp::slot_readFromSocket()
 {
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s) {
@@ -51,14 +51,14 @@ void libmodbus_cpp::TcpBackend::slot_readFromSocket()
     }
 }
 
-void libmodbus_cpp::TcpBackend::slot_removeSocket()
+void libmodbus_cpp::BackendTcp::slot_removeSocket()
 {
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s)
         removeSocket(s);
 }
 
-void libmodbus_cpp::TcpBackend::removeSocket(QTcpSocket *s)
+void libmodbus_cpp::BackendTcp::removeSocket(QTcpSocket *s)
 {
     if (m_sockets.contains(s)) {
         m_sockets.remove(s);

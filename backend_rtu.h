@@ -5,7 +5,7 @@
 
 namespace libmodbus_cpp {
 
-class RtuBackend : public AbstractBackend {
+class BackendRtu : public AbstractBackend {
 public:
     enum class Parity {
         None = 'N',
@@ -13,7 +13,7 @@ public:
         Odd = 'O'
     };
 
-    RtuBackend(const char *device, int baud = 9600, Parity parity = Parity::None, int dataBit = 8, int stopBit = 1);
+    BackendRtu(const char *device, int baud = 9600, Parity parity = Parity::None, int dataBit = 8, int stopBit = 1);
 };
 
 }

@@ -1,6 +1,6 @@
 #include "slave_tcp.h"
 
-libmodbus_cpp::SlaveTcp::SlaveTcp(TcpBackend *backend) :
+libmodbus_cpp::SlaveTcp::SlaveTcp(BackendTcp *backend) :
     AbstractSlave(backend)
 {
 
