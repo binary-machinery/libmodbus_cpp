@@ -17,14 +17,12 @@ LIBS += -lmodbus
 SOURCES += \
     backend.cpp \
     slave_tcp.cpp \
-    master_tcp.cpp \
     main.cpp \
     abstract_slave.cpp
 
 HEADERS += \
     backend.h \
     slave_tcp.h \
-    master_tcp.h \
     abstract_slave.h
 
 unix {
