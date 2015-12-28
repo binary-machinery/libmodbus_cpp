@@ -1,29 +1,37 @@
 #ifndef SLAVE_TCP_H
 #define SLAVE_TCP_H
 
-#include <QObject>
 #include <QTcpServer>
 #include <QSet>
 #include <QTcpSocket>
-#include "libmodbus_cpp.h"
+#include "abstract_slave.h"
+#include "backend.h"
 
 namespace libmodbus_cpp {
 
-class SlaveTcp : public Libmodbus_cpp
+class SlaveTcp : public AbstractSlave
 {
     Q_OBJECT
     QTcpServer m_tcpServer;
     QSet<QTcpSocket*> m_sockets;
 public:
-    SlaveTcp(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT);
+    SlaveTcp(TcpBackend *backend);
     ~SlaveTcp();
 
     bool start();
 
-public slots:
+private slots:
     void slot_processConnection();
     void slot_readFromSocket();
     void slot_removeSocket();
+
+private:
+    void removeSocket(QTcpSocket *s);
+
+protected:
+    inline TcpBackend *getBackend() override {
+        return static_cast<TcpBackend*>(AbstractSlave::getBackend());
+    }
 };
 
 }
