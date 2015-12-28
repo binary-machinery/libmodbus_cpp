@@ -2,7 +2,7 @@
 #define BACKEND_H
 
 #include <QString>
-#include <QSharedPointer>
+#include <cstring>
 #include <modbus/modbus.h>
 #include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
@@ -53,44 +53,10 @@ public:
 
     virtual bool connect();
     virtual void disconnect();
-
-    template<typename T>
-    bool setValueToHoldingRegister(uint16_t address, T value) {
-        if (!m_map || m_map->nb_registers < address)
-            return false;
-        return setValueToTable(m_map->tab_registers, address, value);
-    }
-
-    template<typename T>
-    bool setValueToInputRegister(uint16_t address, T value) {
-        if (!m_map || m_map->nb_input_registers < address)
-            return false;
-        return setValueToTable(m_map->tab_input_registers, address, value);
-    }
-
-private:
-    template<typename TableType, typename DataType>
-    bool setValueToTable(TableType *table, uint16_t address, DataType value) {
-        int regCount = sizeof(value) / sizeof(*table);
-        for (int i = 0; i < regCount; ++i)
-            table[address + i] = extractRegisterFromValue_unsafe<TableType, DataType>(i, value);
-        return true;
-    }
-
-    template<typename TableType, typename DataType>
-    DataType getValueFromTable(TableType *table, uint16_t address) {
-        DataType res(0);
-        int regCount = sizeof(DataType) / sizeof(*table);
-        for (int i = 0; i < regCount; ++i)
-            insertRegisterIntoValue_unsafe(i, res, table[address + i]);
-        return res;
-    }
 };
 
 class RtuBackend : public AbstractBackend {
 public:
-    typedef QSharedPointer<RtuBackend> SharedPtr;
-
     enum class Parity {
         None = 'N',
         Even = 'E',
@@ -104,8 +70,6 @@ class TcpBackend : public AbstractBackend {
     int m_serverSocket = -1;
     int m_maxConnectionCount = 1;
 public:
-    typedef QSharedPointer<TcpBackend> SharedPtr;
-
     TcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
     ~TcpBackend();
 

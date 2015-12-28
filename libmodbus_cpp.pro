@@ -8,18 +8,24 @@ QT -= gui
 QT += network
 
 TARGET = libmodbus_cpp
-TEMPLATE = lib
+#TEMPLATE = lib
+TEMPLATE = app
 CONFIG += c++11
+
+LIBS += -lmodbus
 
 SOURCES += \
     backend.cpp \
     slave_tcp.cpp \
-    master_tcp.cpp
+    master_tcp.cpp \
+    main.cpp \
+    abstract_slave.cpp
 
 HEADERS += \
     backend.h \
     slave_tcp.h \
-    master_tcp.h
+    master_tcp.h \
+    abstract_slave.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp
