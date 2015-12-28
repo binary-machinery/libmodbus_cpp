@@ -55,33 +55,6 @@ public:
     virtual void disconnect();
 };
 
-class RtuBackend : public AbstractBackend {
-public:
-    enum class Parity {
-        None = 'N',
-        Even = 'E',
-        Odd = 'O'
-    };
-
-    RtuBackend(const char *device, int baud = 9600, Parity parity = Parity::None, int dataBit = 8, int stopBit = 1);
-};
-
-class TcpBackend : public AbstractBackend {
-    int m_serverSocket = -1;
-    int m_maxConnectionCount = 1;
-public:
-    TcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
-    ~TcpBackend();
-
-    int getServerSocket();
-
-    bool startListen(int maxConnectionCount = 1);
-
-    void setMaxConnectionCount(int value);
-
-    bool readSocket(int socket);
-};
-
 }
 
 #endif // BACKEND_H

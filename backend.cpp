@@ -1,5 +1,4 @@
 #include <cassert>
-#include <unistd.h>
 #include "backend.h"
 
 using namespace libmodbus_cpp;
@@ -36,52 +35,4 @@ bool AbstractBackend::connect()
 void AbstractBackend::disconnect()
 {
     modbus_close(m_ctx);
-}
-
-
-RtuBackend::RtuBackend(const char *device, int baud, RtuBackend::Parity parity, int dataBit, int stopBit) :
-    AbstractBackend(modbus_new_rtu(device, baud, (char)parity, dataBit, stopBit))
-{
-}
-
-TcpBackend::TcpBackend(const char *address, int port) :
-    AbstractBackend(modbus_new_tcp(address, port))
-{
-}
-
-TcpBackend::~TcpBackend()
-{
-    if (m_serverSocket != -1)
-        close(m_serverSocket);
-}
-
-int TcpBackend::getServerSocket()
-{
-    return m_serverSocket;
-}
-
-bool TcpBackend::startListen(int maxConnectionCount)
-{
-    m_serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
-    if (m_serverSocket)
-        modbus_tcp_accept(getCtx(), &m_serverSocket);
-    return (m_serverSocket != -1);
-}
-
-void TcpBackend::setMaxConnectionCount(int value)
-{
-    m_maxConnectionCount = value;
-}
-
-bool TcpBackend::readSocket(int socket)
-{
-    uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
-    modbus_set_socket(getCtx(), socket);
-    int rc = modbus_receive(getCtx(), query);
-    if (rc > 0) {
-        modbus_reply(getCtx(), query, rc, getMap());
-    } else if (rc == -1) {
-        return false;
-    }
-    return true;
 }

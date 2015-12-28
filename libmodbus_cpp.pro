@@ -18,12 +18,16 @@ SOURCES += \
     backend.cpp \
     slave_tcp.cpp \
     main.cpp \
-    abstract_slave.cpp
+    abstract_slave.cpp \
+    backend_tcp.cpp \
+    backend_rtu.cpp
 
 HEADERS += \
     backend.h \
     slave_tcp.h \
-    abstract_slave.h
+    abstract_slave.h \
+    backend_tcp.h \
+    backend_rtu.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp

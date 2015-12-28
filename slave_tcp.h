@@ -5,7 +5,7 @@
 #include <QSet>
 #include <QTcpSocket>
 #include "abstract_slave.h"
-#include "backend.h"
+#include "backend_tcp.h"
 
 namespace libmodbus_cpp {
 
