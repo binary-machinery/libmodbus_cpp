@@ -1,24 +1,30 @@
 #ifndef BACKENDTCP_H
 #define BACKENDTCP_H
 
+#include <QTcpServer>
+#include <QSet>
+#include <QTcpSocket>
 #include "backend.h"
 
 namespace libmodbus_cpp {
 
 class TcpBackend : public AbstractBackend {
-    int m_serverSocket = -1;
-    int m_maxConnectionCount = 1;
+    Q_OBJECT
+    QTcpServer m_tcpServer;
+    QSet<QTcpSocket*> m_sockets;
 public:
     TcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
     ~TcpBackend();
 
-    int getServerSocket();
-
     bool startListen(int maxConnectionCount = 1);
 
-    void setMaxConnectionCount(int value);
+private slots:
+    void slot_processConnection();
+    void slot_readFromSocket();
+    void slot_removeSocket();
 
-    bool readSocket(int socket);
+private:
+    void removeSocket(QTcpSocket *s);
 };
 
 }

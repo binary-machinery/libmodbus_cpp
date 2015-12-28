@@ -11,7 +11,7 @@ AbstractBackend::AbstractBackend(modbus_t *ctx) :
 
 AbstractBackend::~AbstractBackend()
 {
-    disconnect();
+    disconnectModbus();
     modbus_free(m_ctx);
     modbus_mapping_free(m_map);
 }
@@ -27,12 +27,12 @@ bool AbstractBackend::initRegisterMap(int holdingRegistersCount, int inputRegist
     return initMap(0, 0, holdingRegistersCount, inputRegistersCount);
 }
 
-bool AbstractBackend::connect()
+bool AbstractBackend::connectModbus()
 {
     return !modbus_connect(m_ctx);
 }
 
-void AbstractBackend::disconnect()
+void AbstractBackend::disconnectModbus()
 {
     modbus_close(m_ctx);
 }

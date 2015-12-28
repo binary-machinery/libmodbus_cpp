@@ -12,21 +12,10 @@ namespace libmodbus_cpp {
 class SlaveTcp : public AbstractSlave
 {
     Q_OBJECT
-    QTcpServer m_tcpServer;
-    QSet<QTcpSocket*> m_sockets;
+
 public:
     SlaveTcp(TcpBackend *backend);
     ~SlaveTcp();
-
-    bool start();
-
-private slots:
-    void slot_processConnection();
-    void slot_readFromSocket();
-    void slot_removeSocket();
-
-private:
-    void removeSocket(QTcpSocket *s);
 
 protected:
     inline TcpBackend *getBackend() override {

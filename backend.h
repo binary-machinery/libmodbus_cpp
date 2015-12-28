@@ -1,6 +1,7 @@
 #ifndef BACKEND_H
 #define BACKEND_H
 
+#include <QObject>
 #include <QString>
 #include <cstring>
 #include <modbus/modbus.h>
@@ -31,8 +32,9 @@ inline void insertRegisterIntoValue_unsafe(int idx, ValueType &value, RegType re
 }
 
 
-class AbstractBackend
+class AbstractBackend : public QObject
 {
+    Q_OBJECT
 private:
     modbus_t *m_ctx = Q_NULLPTR;
     modbus_mapping_t *m_map = Q_NULLPTR;
@@ -51,8 +53,8 @@ public:
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool initRegisterMap(int holdingRegistersCount, int inputRegistersCount);
 
-    virtual bool connect();
-    virtual void disconnect();
+    virtual bool connectModbus();
+    virtual void disconnectModbus();
 };
 
 }
