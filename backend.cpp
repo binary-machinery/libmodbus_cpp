@@ -17,16 +17,6 @@ AbstractBackend::~AbstractBackend()
     modbus_mapping_free(m_map);
 }
 
-modbus_t *AbstractBackend::getCtx()
-{
-    return m_ctx;
-}
-
-modbus_mapping_t *AbstractBackend::getMap()
-{
-    return m_map;
-}
-
 bool AbstractBackend::initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount)
 {
     m_map = modbus_mapping_new(holdingBitsCount, inputBitsCount, holdingRegistersCount, inputRegistersCount);
@@ -61,16 +51,21 @@ TcpBackend::TcpBackend(const char *address, int port) :
 
 TcpBackend::~TcpBackend()
 {
-    if (m_socket != -1)
-        close(m_socket);
+    if (m_serverSocket != -1)
+        close(m_serverSocket);
+}
+
+int TcpBackend::getServerSocket()
+{
+    return m_serverSocket;
 }
 
 bool TcpBackend::startListen(int maxConnectionCount)
 {
-    m_socket = modbus_tcp_listen(m_ctx, maxConnectionCount);
-    if (m_socket)
-        modbus_tcp_accept(m_ctx, &m_socket);
-    return (m_socket != -1);
+    m_serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
+    if (m_serverSocket)
+        modbus_tcp_accept(getCtx(), &m_serverSocket);
+    return (m_serverSocket != -1);
 }
 
 void TcpBackend::setMaxConnectionCount(int value)
@@ -78,12 +73,15 @@ void TcpBackend::setMaxConnectionCount(int value)
     m_maxConnectionCount = value;
 }
 
-bool TcpBackend::runAsSlave()
+bool TcpBackend::readSocket(int socket)
 {
-    return startListen(m_maxConnectionCount);
-}
-
-bool TcpBackend::runAsMaster()
-{
-    return false;
+    uint8_t query[MODBUS_TCP_MAX_ADU_LENGTH];
+    modbus_set_socket(getCtx(), socket);
+    int rc = modbus_receive(getCtx(), query);
+    if (rc > 0) {
+        modbus_reply(getCtx(), query, rc, getMap());
+    } else if (rc == -1) {
+        return false;
+    }
+    return true;
 }
