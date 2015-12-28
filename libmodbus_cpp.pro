@@ -22,7 +22,7 @@ SOURCES += \
     abstract_slave.cpp \
     backend_tcp.cpp \
     backend_rtu.cpp \
-    tests/reg_map_read_write_test.cpp
+    tests/reg_map_read_write_test.cpp \
 
 HEADERS += \
     backend.h \
@@ -30,7 +30,7 @@ HEADERS += \
     abstract_slave.h \
     backend_tcp.h \
     backend_rtu.h \
-    tests/reg_map_read_write_test.h
+    tests/reg_map_read_write_test.h \
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp
