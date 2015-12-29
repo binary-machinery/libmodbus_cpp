@@ -1,9 +1,19 @@
+#include <modbus/modbus-private.h>
 #include "backend_tcp.h"
 #include "errno.h"
+
+
+QTcpSocket *libmodbus_cpp::BackendTcp::m_currentSocket = Q_NULLPTR;
 
 libmodbus_cpp::BackendTcp::BackendTcp(const char *address, int port) :
     AbstractBackend(modbus_new_tcp(address, port))
 {
+    const modbus_backend_t *originalBackend = getCtx()->backend;
+    m_fixedBackend.reset(new modbus_backend_t);
+    std::memcpy(m_fixedBackend.data(), originalBackend, sizeof(*m_fixedBackend));
+    m_fixedBackend->select = customSelect;
+    m_fixedBackend->recv = customRecv;
+    getCtx()->backend = m_fixedBackend.data();
 }
 
 libmodbus_cpp::BackendTcp::~BackendTcp()
@@ -13,6 +23,7 @@ libmodbus_cpp::BackendTcp::~BackendTcp()
 
 bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)
 {
+    qDebug() << "bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)";
     int serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
     if (serverSocket != -1) {
         m_tcpServer.setSocketDescriptor(serverSocket);
@@ -31,6 +42,7 @@ void libmodbus_cpp::BackendTcp::slot_processConnection()
         QTcpSocket *s = m_tcpServer.nextPendingConnection();
         if (!s)
             continue;
+        qDebug() << "new socket:" << s->socketDescriptor();
         connect(s, &QTcpSocket::readyRead, this, &BackendTcp::slot_readFromSocket);
         connect(s, &QTcpSocket::disconnected, this, &BackendTcp::slot_removeSocket);
         m_sockets.insert(s);
@@ -42,6 +54,7 @@ void libmodbus_cpp::BackendTcp::slot_readFromSocket()
     qDebug() << "void libmodbus_cpp::BackendTcp::slot_readFromSocket()";
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s) {
+        m_currentSocket = s;
         int nativeSocket = s->socketDescriptor(); // type depends on Qt version
         modbus_set_socket(getCtx(), nativeSocket);
         uint8_t buf[MODBUS_TCP_MAX_ADU_LENGTH];
@@ -54,6 +67,7 @@ void libmodbus_cpp::BackendTcp::slot_readFromSocket()
             removeSocket(s); // if it wasn't removed by slot already
         }
     }
+    m_currentSocket = Q_NULLPTR;
 }
 
 void libmodbus_cpp::BackendTcp::slot_removeSocket()
@@ -67,8 +81,22 @@ void libmodbus_cpp::BackendTcp::slot_removeSocket()
 void libmodbus_cpp::BackendTcp::removeSocket(QTcpSocket *s)
 {
     if (m_sockets.contains(s)) {
+        qDebug() << "remove socket:" << s->socketDescriptor();
         m_sockets.remove(s);
         s->close();
         s->deleteLater();
     }
+}
+
+int libmodbus_cpp::BackendTcp::customSelect(modbus_t *ctx, fd_set *rset, timeval *tv, int msg_length) {
+    Q_UNUSED(ctx);
+    Q_UNUSED(rset);
+    Q_UNUSED(tv);
+    Q_UNUSED(msg_length);
+    return 1;
+}
+
+ssize_t libmodbus_cpp::BackendTcp::customRecv(modbus_t *ctx, uint8_t *rsp, int rsp_length) {
+    Q_UNUSED(ctx);
+    return m_currentSocket->read(reinterpret_cast<char*>(rsp), rsp_length);
 }
