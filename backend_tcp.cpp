@@ -47,8 +47,10 @@ void libmodbus_cpp::BackendTcp::slot_readFromSocket()
         uint8_t buf[MODBUS_TCP_MAX_ADU_LENGTH];
         int messageLength = modbus_receive(getCtx(), buf);
         if (messageLength > 0) {
+            qDebug() << buf;
             modbus_reply(getCtx(), buf, messageLength, getMap());
         } else if (messageLength == -1) {
+            qDebug() << modbus_strerror(errno);
             removeSocket(s); // if it wasn't removed by slot already
         }
     }
