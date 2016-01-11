@@ -14,7 +14,7 @@ class BackendTcp : public AbstractBackend {
     Q_OBJECT
     QTcpServer m_tcpServer;
     QSet<QTcpSocket*> m_sockets;
-    QScopedPointer<modbus_backend_t> m_fixedBackend;
+    QScopedPointer<modbus_backend_t> m_customBackend;
 
 public:
     BackendTcp(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all

@@ -9,11 +9,12 @@ libmodbus_cpp::BackendTcp::BackendTcp(const char *address, int port) :
     AbstractBackend(modbus_new_tcp(address, port))
 {
     const modbus_backend_t *originalBackend = getCtx()->backend;
-    m_fixedBackend.reset(new modbus_backend_t);
-    std::memcpy(m_fixedBackend.data(), originalBackend, sizeof(*m_fixedBackend));
-    m_fixedBackend->select = customSelect;
-    m_fixedBackend->recv = customRecv;
-    getCtx()->backend = m_fixedBackend.data();
+    m_customBackend.reset(new modbus_backend_t);
+    std::memcpy(m_customBackend.data(), originalBackend, sizeof(*m_customBackend));
+    m_customBackend->select = customSelect;
+    m_customBackend->recv = customRecv;
+    getCtx()->backend = m_customBackend.data();
+    modbus_set_slave(getCtx(), 0xFF); // TODO
 }
 
 libmodbus_cpp::BackendTcp::~BackendTcp()
@@ -23,7 +24,6 @@ libmodbus_cpp::BackendTcp::~BackendTcp()
 
 bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)
 {
-    qDebug() << "bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)";
     int serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
     if (serverSocket != -1) {
         m_tcpServer.setSocketDescriptor(serverSocket);
@@ -37,7 +37,6 @@ bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)
 
 void libmodbus_cpp::BackendTcp::slot_processConnection()
 {
-    qDebug() << "void libmodbus_cpp::BackendTcp::slot_processConnection()";
     while (m_tcpServer.hasPendingConnections()) {
         QTcpSocket *s = m_tcpServer.nextPendingConnection();
         if (!s)
@@ -51,16 +50,14 @@ void libmodbus_cpp::BackendTcp::slot_processConnection()
 
 void libmodbus_cpp::BackendTcp::slot_readFromSocket()
 {
-    qDebug() << "void libmodbus_cpp::BackendTcp::slot_readFromSocket()";
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s) {
         m_currentSocket = s;
-        int nativeSocket = s->socketDescriptor(); // type depends on Qt version
-        modbus_set_socket(getCtx(), nativeSocket);
+        modbus_set_socket(getCtx(), s->socketDescriptor());
         uint8_t buf[MODBUS_TCP_MAX_ADU_LENGTH];
         int messageLength = modbus_receive(getCtx(), buf);
         if (messageLength > 0) {
-            qDebug() << buf;
+            qDebug() << "received:" << buf;
             modbus_reply(getCtx(), buf, messageLength, getMap());
         } else if (messageLength == -1) {
             qDebug() << modbus_strerror(errno);
@@ -93,7 +90,7 @@ int libmodbus_cpp::BackendTcp::customSelect(modbus_t *ctx, fd_set *rset, timeval
     Q_UNUSED(rset);
     Q_UNUSED(tv);
     Q_UNUSED(msg_length);
-    return 1;
+    return 1; // TODO: may be not always 1
 }
 
 ssize_t libmodbus_cpp::BackendTcp::customRecv(modbus_t *ctx, uint8_t *rsp, int rsp_length) {
