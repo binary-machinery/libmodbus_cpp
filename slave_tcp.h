@@ -5,7 +5,7 @@
 #include <QSet>
 #include <QTcpSocket>
 #include "abstract_slave.h"
-#include "backend_tcp.h"
+#include "slave_tcp_backend.h"
 
 namespace libmodbus_cpp {
 
@@ -14,12 +14,12 @@ class SlaveTcp : public AbstractSlave
     Q_OBJECT
 
 public:
-    SlaveTcp(BackendTcp *backend);
+    SlaveTcp(SlaveTcpBackend *backend);
     ~SlaveTcp();
 
 protected:
-    inline BackendTcp *getBackend() override {
-        return static_cast<BackendTcp*>(AbstractSlave::getBackend());
+    inline SlaveTcpBackend *getBackend() override {
+        return static_cast<SlaveTcpBackend*>(AbstractSlave::getBackend());
     }
 };
 

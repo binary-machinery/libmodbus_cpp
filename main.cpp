@@ -7,13 +7,18 @@
 
 using namespace libmodbus_cpp;
 
+const bool RUN_TESTS = false;
+
 int main(int argc, char *argv[])
 {
-    //    libmodbus_cpp::RegMapReadWriteTest t1;
-    //    QTest::qExec(&t1);
+    if (RUN_TESTS) {
+        libmodbus_cpp::RegMapReadWriteTest t1;
+        QTest::qExec(&t1);
+        return 0;
+    }
 
     QCoreApplication app(argc, argv);
-    BackendTcp *b = new BackendTcp("127.0.0.1", 1502);
+    SlaveTcpBackend *b = new SlaveTcpBackend("127.0.0.1", 1502);
     b->initRegisterMap(32, 32);
     SlaveTcp s(b);
     b->startListen(10);

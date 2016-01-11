@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-#include "backend_tcp.h"
+#include "slave_tcp_backend.h"
 #include "slave_tcp.h"
 
 namespace libmodbus_cpp {
@@ -12,12 +12,12 @@ class RegMapReadWriteTest : public QObject
 {
     Q_OBJECT
     libmodbus_cpp::SlaveTcp *m_slave = nullptr;
+
 private slots:
     void initTestCase();
     void testHoldingRegisters();
     void testInputRegisters();
     void cleanupTestCase();
-
 
 private:
     template<typename T>

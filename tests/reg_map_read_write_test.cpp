@@ -2,7 +2,7 @@
 
 void libmodbus_cpp::RegMapReadWriteTest::initTestCase()
 {
-    libmodbus_cpp::BackendTcp *b = new libmodbus_cpp::BackendTcp();
+    libmodbus_cpp::SlaveTcpBackend *b = new libmodbus_cpp::SlaveTcpBackend();
     b->initRegisterMap(64, 64);
     m_slave = new libmodbus_cpp::SlaveTcp(b);
 }

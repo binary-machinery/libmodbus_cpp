@@ -1,33 +1,34 @@
 #include <modbus/modbus-private.h>
-#include "backend_tcp.h"
+#include "slave_tcp_backend.h"
 #include "errno.h"
 
 
-QTcpSocket *libmodbus_cpp::BackendTcp::m_currentSocket = Q_NULLPTR;
+QTcpSocket *libmodbus_cpp::SlaveTcpBackend::m_currentSocket = Q_NULLPTR;
 
-libmodbus_cpp::BackendTcp::BackendTcp(const char *address, int port) :
+libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port) :
     AbstractBackend(modbus_new_tcp(address, port))
 {
-    const modbus_backend_t *originalBackend = getCtx()->backend;
+    m_originalBackend = getCtx()->backend;
     m_customBackend.reset(new modbus_backend_t);
-    std::memcpy(m_customBackend.data(), originalBackend, sizeof(*m_customBackend));
+    std::memcpy(m_customBackend.data(), m_originalBackend, sizeof(*m_customBackend));
     m_customBackend->select = customSelect;
     m_customBackend->recv = customRecv;
     getCtx()->backend = m_customBackend.data();
     modbus_set_slave(getCtx(), 0xFF); // TODO
 }
 
-libmodbus_cpp::BackendTcp::~BackendTcp()
+libmodbus_cpp::SlaveTcpBackend::~SlaveTcpBackend()
 {
+    getCtx()->backend = m_originalBackend; // for normal deinit by libmodbus
     m_tcpServer.close();
 }
 
-bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)
+bool libmodbus_cpp::SlaveTcpBackend::startListen(int maxConnectionCount)
 {
     int serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
     if (serverSocket != -1) {
         m_tcpServer.setSocketDescriptor(serverSocket);
-        connect(&m_tcpServer, &QTcpServer::newConnection, this, &BackendTcp::slot_processConnection);
+        connect(&m_tcpServer, &QTcpServer::newConnection, this, &SlaveTcpBackend::slot_processConnection);
         return true;
     } else {
         qDebug() << modbus_strerror(errno);
@@ -35,20 +36,20 @@ bool libmodbus_cpp::BackendTcp::startListen(int maxConnectionCount)
     }
 }
 
-void libmodbus_cpp::BackendTcp::slot_processConnection()
+void libmodbus_cpp::SlaveTcpBackend::slot_processConnection()
 {
     while (m_tcpServer.hasPendingConnections()) {
         QTcpSocket *s = m_tcpServer.nextPendingConnection();
         if (!s)
             continue;
         qDebug() << "new socket:" << s->socketDescriptor();
-        connect(s, &QTcpSocket::readyRead, this, &BackendTcp::slot_readFromSocket);
-        connect(s, &QTcpSocket::disconnected, this, &BackendTcp::slot_removeSocket);
+        connect(s, &QTcpSocket::readyRead, this, &SlaveTcpBackend::slot_readFromSocket);
+        connect(s, &QTcpSocket::disconnected, this, &SlaveTcpBackend::slot_removeSocket);
         m_sockets.insert(s);
     }
 }
 
-void libmodbus_cpp::BackendTcp::slot_readFromSocket()
+void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
 {
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s) {
@@ -67,7 +68,7 @@ void libmodbus_cpp::BackendTcp::slot_readFromSocket()
     m_currentSocket = Q_NULLPTR;
 }
 
-void libmodbus_cpp::BackendTcp::slot_removeSocket()
+void libmodbus_cpp::SlaveTcpBackend::slot_removeSocket()
 {
     qDebug() << "void libmodbus_cpp::BackendTcp::slot_removeSocket()";
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
@@ -75,7 +76,7 @@ void libmodbus_cpp::BackendTcp::slot_removeSocket()
         removeSocket(s);
 }
 
-void libmodbus_cpp::BackendTcp::removeSocket(QTcpSocket *s)
+void libmodbus_cpp::SlaveTcpBackend::removeSocket(QTcpSocket *s)
 {
     if (m_sockets.contains(s)) {
         qDebug() << "remove socket:" << s->socketDescriptor();
@@ -85,7 +86,7 @@ void libmodbus_cpp::BackendTcp::removeSocket(QTcpSocket *s)
     }
 }
 
-int libmodbus_cpp::BackendTcp::customSelect(modbus_t *ctx, fd_set *rset, timeval *tv, int msg_length) {
+int libmodbus_cpp::SlaveTcpBackend::customSelect(modbus_t *ctx, fd_set *rset, timeval *tv, int msg_length) {
     Q_UNUSED(ctx);
     Q_UNUSED(rset);
     Q_UNUSED(tv);
@@ -93,7 +94,7 @@ int libmodbus_cpp::BackendTcp::customSelect(modbus_t *ctx, fd_set *rset, timeval
     return 1; // TODO: may be not always 1
 }
 
-ssize_t libmodbus_cpp::BackendTcp::customRecv(modbus_t *ctx, uint8_t *rsp, int rsp_length) {
+ssize_t libmodbus_cpp::SlaveTcpBackend::customRecv(modbus_t *ctx, uint8_t *rsp, int rsp_length) {
     Q_UNUSED(ctx);
     return m_currentSocket->read(reinterpret_cast<char*>(rsp), rsp_length);
 }

@@ -1,5 +1,5 @@
-#ifndef BACKENDTCP_H
-#define BACKENDTCP_H
+#ifndef SLAVETCPBACKEND_H
+#define SLAVETCPBACKEND_H
 
 #include <QTcpServer>
 #include <QSet>
@@ -10,15 +10,16 @@ typedef struct _modbus_backend modbus_backend_t;
 
 namespace libmodbus_cpp {
 
-class BackendTcp : public AbstractBackend {
+class SlaveTcpBackend : public AbstractBackend {
     Q_OBJECT
     QTcpServer m_tcpServer;
     QSet<QTcpSocket*> m_sockets;
+    const modbus_backend_t *m_originalBackend = nullptr;
     QScopedPointer<modbus_backend_t> m_customBackend;
 
 public:
-    BackendTcp(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
-    ~BackendTcp();
+    SlaveTcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
+    ~SlaveTcpBackend();
 
     bool startListen(int maxConnectionCount = 1);
 
@@ -37,4 +38,4 @@ private:
 
 }
 
-#endif // BACKENDTCP_H
+#endif // SLAVETCPBACKEND_H
