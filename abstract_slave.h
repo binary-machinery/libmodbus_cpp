@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QScopedPointer>
+#include <stdexcept>
 #include "backend.h"
 
 namespace libmodbus_cpp {
@@ -20,29 +21,37 @@ protected:
 public:
     template<typename ValueType>
     bool setValueToHoldingRegister(uint16_t address, ValueType value) {
-        if (!getBackend()->getMap() || getBackend()->getMap()->nb_registers < address)
-            throw std::invalid_argument();
+        if (!getBackend()->getMap())
+            throw std::logic_error("map was not inited");
+        if (getBackend()->getMap()->nb_registers <= address || address < 0)
+            throw std::invalid_argument("wrong address");
         return setValueToTable(getBackend()->getMap()->tab_registers, address, value);
     }
 
     template<typename ValueType>
     ValueType getValueFromHoldingRegister(uint16_t address) {
-        if (!getBackend()->getMap() || getBackend()->getMap()->nb_registers < address)
-            throw std::invalid_argument();
+        if (!getBackend()->getMap())
+            throw std::logic_error("map was not inited");
+        if (getBackend()->getMap()->nb_registers <= address || address < 0)
+            throw std::invalid_argument("wrong address");
         return getValueFromTable<ValueType>(getBackend()->getMap()->tab_registers, address);
     }
 
     template<typename ValueType>
     bool setValueToInputRegister(uint16_t address, ValueType value) {
-        if (!getBackend()->getMap() || getBackend()->getMap()->nb_input_registers < address)
-            throw std::invalid_argument();
+        if (!getBackend()->getMap())
+            throw std::logic_error("map was not inited");
+        if (getBackend()->getMap()->nb_input_registers <= address || address < 0)
+            throw std::invalid_argument("wrong address");
         return setValueToTable(getBackend()->getMap()->tab_input_registers, address, value);
     }
 
     template<typename ValueType>
     ValueType getValueFromInputRegister(uint16_t address) {
-        if (!getBackend()->getMap() || getBackend()->getMap()->nb_input_registers < address)
-            throw std::invalid_argument();
+        if (!getBackend()->getMap())
+            throw std::logic_error("map was not inited");
+        if (getBackend()->getMap()->nb_input_registers <= address || address < 0)
+            throw std::invalid_argument("wrong address");
         return getValueFromTable<ValueType>(getBackend()->getMap()->tab_input_registers, address);
     }
 
