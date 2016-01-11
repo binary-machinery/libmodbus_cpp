@@ -1,16 +1,14 @@
 #ifndef ABSTRACTSLAVE_H
 #define ABSTRACTSLAVE_H
 
-#include <QObject>
 #include <QScopedPointer>
 #include <stdexcept>
 #include "backend.h"
 
 namespace libmodbus_cpp {
 
-class AbstractSlave : public QObject
+class AbstractSlave
 {
-    Q_OBJECT
     QScopedPointer<AbstractSlaveBackend> m_backend;
 
 protected:
@@ -20,6 +18,22 @@ protected:
     }
 
 public:
+    void setValueToCoil(uint16_t address, bool value) {
+        if (!getBackend()->getMap())
+            throw std::logic_error("map was not inited");
+        if (getBackend()->getMap()->nb_bits <= address || address < 0)
+            throw std::invalid_argument("wrong address");
+        return setValueToTable(getBackend()->getMap()->tab_bits, address, value);
+    }
+
+    bool setValueToCoil(uint16_t address) {
+        if (!getBackend()->getMap())
+            throw std::logic_error("map was not inited");
+        if (getBackend()->getMap()->nb_bits <= address || address < 0)
+            throw std::invalid_argument("wrong address");
+        return getValueFromTable<bool>(getBackend()->getMap()->tab_bits, address);
+    }
+
     template<typename ValueType>
     bool setValueToHoldingRegister(uint16_t address, ValueType value) {
         if (!getBackend()->getMap())
@@ -58,10 +72,9 @@ public:
 
 private:
     template<typename ValueType, typename TableType>
-    bool setValueToTable(TableType *table, uint16_t address, const ValueType &value) {
+    void setValueToTable(TableType *table, uint16_t address, const ValueType &value) {
         int offset = sizeof(TableType) * address;
         std::memcpy(reinterpret_cast<uint8_t*>(table) + offset, &value, sizeof(ValueType));
-        return true;
     }
 
     template<typename ValueType, typename TableType>
