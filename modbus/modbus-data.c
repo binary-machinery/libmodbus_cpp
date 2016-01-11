@@ -19,7 +19,7 @@
 # include <arpa/inet.h>
 #endif
 
-#include <config.h>
+#include "config.h"
 
 #include "modbus.h"
 
