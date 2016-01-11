@@ -11,10 +11,11 @@ namespace libmodbus_cpp {
 class AbstractSlave : public QObject
 {
     Q_OBJECT
-    QScopedPointer<AbstractBackend> m_backend;
+    QScopedPointer<AbstractSlaveBackend> m_backend;
+
 protected:
-    AbstractSlave(AbstractBackend *backend);
-    inline virtual AbstractBackend *getBackend() {
+    AbstractSlave(AbstractSlaveBackend *backend);
+    inline virtual AbstractSlaveBackend *getBackend() {
         return m_backend.data();
     }
 

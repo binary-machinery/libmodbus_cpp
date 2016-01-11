@@ -6,7 +6,7 @@
 QTcpSocket *libmodbus_cpp::SlaveTcpBackend::m_currentSocket = Q_NULLPTR;
 
 libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port) :
-    AbstractBackend(modbus_new_tcp(address, port))
+    AbstractSlaveBackend(modbus_new_tcp(address, port))
 {
     m_originalBackend = getCtx()->backend;
     m_customBackend.reset(new modbus_backend_t);

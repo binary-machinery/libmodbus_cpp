@@ -36,7 +36,6 @@ class AbstractBackend : public QObject
 {
     Q_OBJECT
     modbus_t *m_ctx = Q_NULLPTR;
-    modbus_mapping_t *m_map = Q_NULLPTR;
 
 protected:
     AbstractBackend(modbus_t *ctx);
@@ -47,6 +46,17 @@ public:
     inline modbus_t *getCtx() {
         return m_ctx;
     }
+};
+
+class AbstractSlaveBackend : public AbstractBackend {
+    Q_OBJECT
+    modbus_mapping_t *m_map = Q_NULLPTR;
+
+protected:
+    AbstractSlaveBackend(modbus_t *ctx);
+
+public:
+    ~AbstractSlaveBackend();
 
     inline modbus_mapping_t *getMap() {
         return m_map;
@@ -54,9 +64,6 @@ public:
 
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool initRegisterMap(int holdingRegistersCount, int inputRegistersCount);
-
-    virtual bool connectModbus();
-    virtual void disconnectModbus();
 };
 
 }

@@ -10,7 +10,7 @@ typedef struct _modbus_backend modbus_backend_t;
 
 namespace libmodbus_cpp {
 
-class SlaveTcpBackend : public AbstractBackend {
+class SlaveTcpBackend : public AbstractSlaveBackend {
     Q_OBJECT
     QTcpServer m_tcpServer;
     QSet<QTcpSocket*> m_sockets;
