@@ -27,7 +27,8 @@ SOURCES += \
     modbus/modbus-rtu.c \
     modbus/modbus-tcp.c \
     abstract_master.cpp \
-    slave_tcp_backend.cpp
+    slave_tcp_backend.cpp \
+    master_tcp_backend.cpp
 
 HEADERS += \
     backend.h \
@@ -44,7 +45,8 @@ HEADERS += \
     modbus/modbus-tcp-private.h \
     modbus/modbus-version.h \
     abstract_master.h \
-    slave_tcp_backend.h
+    slave_tcp_backend.h \
+    master_tcp_backend.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp

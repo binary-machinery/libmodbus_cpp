@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
     SlaveTcpBackend *b = new SlaveTcpBackend("127.0.0.1", 1502);
     b->initRegisterMap(32, 32);
     SlaveTcp s(b);
+    s.setValueToInputRegister(6, (double)100.500);
     b->startListen(10);
 
     return app.exec();
