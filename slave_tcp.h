@@ -11,8 +11,6 @@ namespace libmodbus_cpp {
 
 class SlaveTcp : public AbstractSlave
 {
-    Q_OBJECT
-
 public:
     SlaveTcp(SlaveTcpBackend *backend);
     ~SlaveTcp();

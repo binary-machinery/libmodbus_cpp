@@ -32,9 +32,8 @@ inline void insertRegisterIntoValue_unsafe(int idx, ValueType &value, RegType re
 }
 
 
-class AbstractBackend : public QObject
+class AbstractBackend
 {
-    Q_OBJECT
     modbus_t *m_ctx = Q_NULLPTR;
 
 protected:
@@ -48,8 +47,8 @@ public:
     }
 };
 
-class AbstractSlaveBackend : public AbstractBackend {
-    Q_OBJECT
+class AbstractSlaveBackend : public AbstractBackend
+{
     modbus_mapping_t *m_map = Q_NULLPTR;
 
 protected:
