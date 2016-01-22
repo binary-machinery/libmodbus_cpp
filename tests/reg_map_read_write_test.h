@@ -11,15 +11,30 @@ namespace libmodbus_cpp {
 class RegMapReadWriteTest : public QObject
 {
     Q_OBJECT
-    libmodbus_cpp::SlaveTcp *m_slave = nullptr;
+    libmodbus_cpp::AbstractSlaveBackend *m_backend = Q_NULLPTR;
+    libmodbus_cpp::SlaveTcp *m_slave = Q_NULLPTR;
 
 private slots:
     void initTestCase();
+    void testCoils();
+    void testDiscreteInputs();
     void testHoldingRegisters();
     void testInputRegisters();
     void cleanupTestCase();
 
 private:
+    void testCoil(bool value, SlaveTcp *s, uint16_t &address) {
+        s->setValueToCoil(address, value);
+        QCOMPARE(value, s->getValueFromCoil(address));
+        address += sizeof(value);
+    }
+
+    void testDiscreteInput(bool value, SlaveTcp *s, uint16_t &address) {
+        s->setValueToDiscreteInput(address, value);
+        QCOMPARE(value, s->getValueFromDiscreteInput(address));
+        address += sizeof(value);
+    }
+
     template<typename T>
     void testHoldingValue(const T &value, SlaveTcp *s, uint16_t &address) {
         s->setValueToHoldingRegister(address, value);
