@@ -46,7 +46,8 @@ HEADERS += \
     modbus/modbus-version.h \
     abstract_master.h \
     slave_tcp_backend.h \
-    master_tcp_backend.h
+    master_tcp_backend.h \
+    defs.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp
