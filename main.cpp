@@ -2,19 +2,24 @@
 #include <QTest>
 #include <QCoreApplication>
 #include "tests/reg_map_read_write_test.h"
+#include "tests/tcp_read_write_test.h"
 
 #include "slave_tcp.h"
 
 using namespace libmodbus_cpp;
 
-const bool RUN_TESTS = false;
+const bool RUN_TESTS = true;
 
 int main(int argc, char *argv[])
 {
     if (RUN_TESTS) {
+        QCoreApplication app(argc, argv);
         libmodbus_cpp::RegMapReadWriteTest t1;
         QTest::qExec(&t1);
-        return 0;
+
+        libmodbus_cpp::TcpReadWriteTest t2;
+        QTest::qExec(&t2);
+        return app.exec();
     }
 
     QCoreApplication app(argc, argv);
@@ -28,5 +33,6 @@ int main(int argc, char *argv[])
     }
 
     b->startListen(10);
+
     return app.exec();
 }

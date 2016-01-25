@@ -55,7 +55,9 @@ template<typename ValueType>
 ValueType AbstractMaster::readInputRegister(uint16_t address) {
     int regCount = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
     uint16_t rawData;
-    modbus_read_input_registers(getBackend()->getCtx(), address, regCount, &rawData);
+    int errorCode = modbus_read_input_registers(getBackend()->getCtx(), address, regCount, &rawData);
+    if (errorCode == -1)
+        throw std::runtime_error(modbus_strerror(errno));
     return static_cast<ValueType>(rawData);
 }
 

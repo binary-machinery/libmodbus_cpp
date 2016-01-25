@@ -22,7 +22,6 @@ SOURCES += \
     abstract_slave.cpp \
     backend_rtu.cpp \
     tests/reg_map_read_write_test.cpp \
-	tests/remote_read_write_test.cpp \
     modbus/modbus.c \
     modbus/modbus-data.c \
     modbus/modbus-rtu.c \
@@ -30,7 +29,8 @@ SOURCES += \
     abstract_master.cpp \
     slave_tcp_backend.cpp \
     master_tcp_backend.cpp \
-    master_tcp.cpp
+    master_tcp.cpp \
+    tests/tcp_read_write_test.cpp
 
 HEADERS += \
     backend.h \
@@ -38,7 +38,6 @@ HEADERS += \
     abstract_slave.h \
     backend_rtu.h \
     tests/reg_map_read_write_test.h \
-    tests/remote_read_write_test.h \
     modbus/config.h \
     modbus/modbus.h \
     modbus/modbus-private.h \
@@ -51,7 +50,8 @@ HEADERS += \
     slave_tcp_backend.h \
     master_tcp_backend.h \
     defs.h \
-    master_tcp.h
+    master_tcp.h \
+    tests/tcp_read_write_test.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp

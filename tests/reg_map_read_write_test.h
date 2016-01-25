@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-#include "slave_tcp_backend.h"
 #include "slave_tcp.h"
 
 namespace libmodbus_cpp {
