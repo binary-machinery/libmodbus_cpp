@@ -11,7 +11,7 @@ QT += testlib
 TARGET = libmodbus_cpp
 #TEMPLATE = lib
 TEMPLATE = app
-CONFIG += c++11
+CONFIG += c++14
 
 #LIBS += -lmodbus
 
@@ -28,7 +28,8 @@ SOURCES += \
     modbus/modbus-tcp.c \
     abstract_master.cpp \
     slave_tcp_backend.cpp \
-    master_tcp_backend.cpp
+    master_tcp_backend.cpp \
+    master_tcp.cpp
 
 HEADERS += \
     backend.h \
@@ -47,7 +48,8 @@ HEADERS += \
     abstract_master.h \
     slave_tcp_backend.h \
     master_tcp_backend.h \
-    defs.h
+    defs.h \
+    master_tcp.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp
