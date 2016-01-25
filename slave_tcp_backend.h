@@ -22,6 +22,7 @@ public:
     ~SlaveTcpBackend();
 
     bool startListen(int maxConnectionCount = 1);
+    void stopListen();
 
 private slots:
     void slot_processConnection();

@@ -20,7 +20,7 @@ libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port) :
 libmodbus_cpp::SlaveTcpBackend::~SlaveTcpBackend()
 {
     getCtx()->backend = m_originalBackend; // for normal deinit by libmodbus
-    m_tcpServer.close();
+    stopListen();
 }
 
 bool libmodbus_cpp::SlaveTcpBackend::startListen(int maxConnectionCount)
@@ -35,6 +35,11 @@ bool libmodbus_cpp::SlaveTcpBackend::startListen(int maxConnectionCount)
         qDebug() << modbus_strerror(errno);
         return false;
     }
+}
+
+void libmodbus_cpp::SlaveTcpBackend::stopListen()
+{
+    m_tcpServer.close();
 }
 
 void libmodbus_cpp::SlaveTcpBackend::slot_processConnection()
