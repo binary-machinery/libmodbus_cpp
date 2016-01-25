@@ -11,7 +11,7 @@ QT += testlib
 TARGET = libmodbus_cpp
 #TEMPLATE = lib
 TEMPLATE = app
-CONFIG += c++14
+CONFIG += c++11
 
 #LIBS += -lmodbus
 
@@ -22,6 +22,7 @@ SOURCES += \
     abstract_slave.cpp \
     backend_rtu.cpp \
     tests/reg_map_read_write_test.cpp \
+	tests/remote_read_write_test.cpp \
     modbus/modbus.c \
     modbus/modbus-data.c \
     modbus/modbus-rtu.c \
@@ -37,6 +38,7 @@ HEADERS += \
     abstract_slave.h \
     backend_rtu.h \
     tests/reg_map_read_write_test.h \
+    tests/remote_read_write_test.h \
     modbus/config.h \
     modbus/modbus.h \
     modbus/modbus-private.h \

@@ -25,6 +25,7 @@ libmodbus_cpp::SlaveTcpBackend::~SlaveTcpBackend()
 
 bool libmodbus_cpp::SlaveTcpBackend::startListen(int maxConnectionCount)
 {
+    qDebug() << "Start listen";
     int serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
     if (serverSocket != -1) {
         m_tcpServer.setSocketDescriptor(serverSocket);
@@ -38,6 +39,7 @@ bool libmodbus_cpp::SlaveTcpBackend::startListen(int maxConnectionCount)
 
 void libmodbus_cpp::SlaveTcpBackend::slot_processConnection()
 {
+    qDebug() << "Process connection";
     while (m_tcpServer.hasPendingConnections()) {
         QTcpSocket *s = m_tcpServer.nextPendingConnection();
         if (!s)
@@ -53,6 +55,7 @@ void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
 {
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s) {
+        qDebug() << "Read from socket" << s->socketDescriptor();
         m_currentSocket = s;
         modbus_set_socket(getCtx(), s->socketDescriptor());
         uint8_t buf[MODBUS_TCP_MAX_ADU_LENGTH];
@@ -70,7 +73,7 @@ void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
 
 void libmodbus_cpp::SlaveTcpBackend::slot_removeSocket()
 {
-    qDebug() << "void libmodbus_cpp::BackendTcp::slot_removeSocket()";
+    qDebug() << "Remove socket";
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s)
         removeSocket(s);
