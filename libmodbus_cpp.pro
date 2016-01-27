@@ -11,7 +11,7 @@ QT += testlib
 TARGET = libmodbus_cpp
 #TEMPLATE = lib
 TEMPLATE = app
-CONFIG += c++11
+CONFIG += c++14
 
 #LIBS += -lmodbus
 

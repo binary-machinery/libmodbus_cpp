@@ -40,25 +40,27 @@ public:
 template<typename ValueType>
 ValueType AbstractMaster::readHoldingRegister(uint16_t address) {
     int regCount = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
-    uint16_t rawData;
-    modbus_read_registers(getBackend()->getCtx(), address, regCount, &rawData);
-    return static_cast<ValueType>(rawData);
+    ValueType result;
+    int errorCode = modbus_read_registers(getBackend()->getCtx(), address, regCount, reinterpret_cast<uint16_t*>(&result));
+    if (errorCode == -1)
+        throw std::runtime_error(modbus_strerror(errno));
+    return result;
 }
 
 template<typename ValueType>
 void AbstractMaster::writeHoldingRegister(uint16_t address, ValueType value) {
     int regCount = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
-    modbus_write_registers(getBackend()->getCtx(), address, regCount, reinterpret_cast<uint16_t>(&value));
+    modbus_write_registers(getBackend()->getCtx(), address, regCount, reinterpret_cast<uint16_t*>(&value));
 }
 
 template<typename ValueType>
 ValueType AbstractMaster::readInputRegister(uint16_t address) {
     int regCount = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
-    uint16_t rawData;
-    int errorCode = modbus_read_input_registers(getBackend()->getCtx(), address, regCount, &rawData);
+    ValueType result;
+    int errorCode = modbus_read_input_registers(getBackend()->getCtx(), address, regCount, reinterpret_cast<uint16_t*>(&result));
     if (errorCode == -1)
         throw std::runtime_error(modbus_strerror(errno));
-    return static_cast<ValueType>(rawData);
+    return result;
 }
 
 }
