@@ -12,9 +12,8 @@ class TcpReadWriteTest : public QObject
 {
     Q_OBJECT
     static const int TABLE_SIZE = 64;
-//    libmodbus_cpp::SlaveTcpBackend *m_slaveBackend = Q_NULLPTR;
-//    libmodbus_cpp::SlaveTcp *m_slave = Q_NULLPTR;
-    libmodbus_cpp::MasterTcpBackend *m_masterBackend = Q_NULLPTR;
+    //    libmodbus_cpp::SlaveTcpBackend *m_slaveBackend = Q_NULLPTR;
+    //    libmodbus_cpp::SlaveTcp *m_slave = Q_NULLPTR;
     libmodbus_cpp::MasterTcp *m_master = Q_NULLPTR;
 
 private slots:
@@ -70,8 +69,12 @@ private:
             ValueType valueBefore = 0;
             for (int j = 0; j < size; ++j)
                 reinterpret_cast<uint16_t*>(&valueBefore)[j] = 1;
-            ValueType valueAfter = m_master->readInputRegister<ValueType>(i);
-            QCOMPARE(valueAfter, valueBefore);
+            try {
+                ValueType valueAfter = m_master->readInputRegister<ValueType>(i);
+                QCOMPARE(valueAfter, valueBefore);
+            } catch (RemoteRWError &e) {
+                QVERIFY2(false, e.what());
+            }
         }
         disconnect();
     }
@@ -84,8 +87,12 @@ private:
             ValueType valueBefore = 0;
             for (int i = 0; i < size; ++i)
                 reinterpret_cast<uint16_t*>(&valueBefore)[i] = 1;
-            ValueType valueAfter = m_master->readHoldingRegister<ValueType>(i);
-            QCOMPARE(valueAfter, valueBefore);
+            try {
+                ValueType valueAfter = m_master->readHoldingRegister<ValueType>(i);
+                QCOMPARE(valueAfter, valueBefore);
+            } catch (RemoteRWError &e) {
+                QVERIFY2(false, e.what());
+            }
         }
         disconnect();
     }
@@ -97,9 +104,13 @@ private:
         int size = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
         for (int i = 0; i < TABLE_SIZE; i += size) {
             ValueType valueBefore = (ValueType)(rand()) + 1 / (double)rand();
-            m_master->writeHoldingRegister(i, valueBefore);
-            ValueType valueAfter = m_master->readHoldingRegister<ValueType>(i);
-            QCOMPARE(valueAfter, valueBefore);
+            try {
+                m_master->writeHoldingRegister(i, valueBefore);
+                ValueType valueAfter = m_master->readHoldingRegister<ValueType>(i);
+                QCOMPARE(valueAfter, valueBefore);
+            } catch (RemoteRWError &e) {
+                QVERIFY2(false, e.what());
+            }
         }
         disconnect();
     }

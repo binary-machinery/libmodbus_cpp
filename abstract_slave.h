@@ -4,6 +4,7 @@
 #include <QScopedPointer>
 #include <stdexcept>
 #include "backend.h"
+#include "defs.h"
 
 namespace libmodbus_cpp {
 
@@ -19,6 +20,8 @@ protected:
     virtual ~AbstractSlave() {}
 
 public:
+    bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
+
     void setValueToCoil(uint16_t address, bool value);
     bool getValueFromCoil(uint16_t address);
 
@@ -54,36 +57,36 @@ private:
 template<typename ValueType>
 void AbstractSlave::setValueToHoldingRegister(uint16_t address, ValueType value) {
     if (!getBackend()->getMap())
-        throw std::logic_error("map was not inited");
+        throw LocalWriteError("map was not inited");
     if (getBackend()->getMap()->nb_registers <= address)
-        throw std::invalid_argument("wrong address");
+        throw LocalWriteError("wrong address");
     setValueToTable(getBackend()->getMap()->tab_registers, address, value);
 }
 
 template<typename ValueType>
 ValueType AbstractSlave::getValueFromHoldingRegister(uint16_t address) {
     if (!getBackend()->getMap())
-        throw std::logic_error("map was not inited");
+        throw LocalReadError("map was not inited");
     if (getBackend()->getMap()->nb_registers <= address)
-        throw std::invalid_argument("wrong address");
+        throw LocalReadError("wrong address");
     return getValueFromTable<ValueType>(getBackend()->getMap()->tab_registers, address);
 }
 
 template<typename ValueType>
 void AbstractSlave::setValueToInputRegister(uint16_t address, ValueType value) {
     if (!getBackend()->getMap())
-        throw std::logic_error("map was not inited");
+        throw LocalWriteError("map was not inited");
     if (getBackend()->getMap()->nb_input_registers <= address)
-        throw std::invalid_argument("wrong address");
+        throw LocalWriteError("wrong address");
     setValueToTable(getBackend()->getMap()->tab_input_registers, address, value);
 }
 
 template<typename ValueType>
 ValueType AbstractSlave::getValueFromInputRegister(uint16_t address) {
     if (!getBackend()->getMap())
-        throw std::logic_error("map was not inited");
+        throw LocalReadError("map was not inited");
     if (getBackend()->getMap()->nb_input_registers <= address)
-        throw std::invalid_argument("wrong address");
+        throw LocalReadError("wrong address");
     return getValueFromTable<ValueType>(getBackend()->getMap()->tab_input_registers, address);
 }
 
