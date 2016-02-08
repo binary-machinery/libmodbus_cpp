@@ -30,7 +30,8 @@ SOURCES += \
     slave_tcp_backend.cpp \
     master_tcp_backend.cpp \
     master_tcp.cpp \
-    tests/tcp_read_write_test.cpp
+    tests/tcp_read_write_test.cpp \
+    factory.cpp
 
 HEADERS += \
     backend.h \
@@ -51,7 +52,8 @@ HEADERS += \
     master_tcp_backend.h \
     defs.h \
     master_tcp.h \
-    tests/tcp_read_write_test.h
+    tests/tcp_read_write_test.h \
+    factory.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp

@@ -11,6 +11,14 @@ class MasterTcp : public AbstractMaster
 public:
     MasterTcp(MasterTcpBackend *backend);
     ~MasterTcp();
+
+    bool connect();
+    void disconnect();
+
+protected:
+    inline MasterTcpBackend *getBackend() override {
+        return static_cast<MasterTcpBackend*>(AbstractMaster::getBackend());
+    }
 };
 
 }
