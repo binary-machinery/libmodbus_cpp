@@ -1,7 +1,9 @@
 #ifndef DEFS_H
 #define DEFS_H
 
-#include "stdexcept"
+#include <stdexcept>
+#include <modbus/modbus.h>
+#include <functional>
 
 namespace libmodbus_cpp {
 
@@ -22,6 +24,11 @@ enum class DataType {
     InputRegister
 };
 
+
+class AbstractSlaveBackend;
+using FunctionCode = uint8_t;
+using Address = uint16_t;
+using HookFunction = std::function<void(void)>;
 
 // exceptions ==============================================================
 using RemoteRWError = std::runtime_error;

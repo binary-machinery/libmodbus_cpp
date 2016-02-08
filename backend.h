@@ -3,10 +3,14 @@
 
 #include <QObject>
 #include <QString>
+#include <QMap>
+#include <QMap>
+#include <functional>
 #include <cstring>
 #include <modbus/modbus.h>
 #include <modbus/modbus-rtu.h>
 #include <modbus/modbus-tcp.h>
+#include "defs.h"
 
 namespace libmodbus_cpp {
 
@@ -49,10 +53,16 @@ public:
 
 class AbstractSlaveBackend : public AbstractBackend
 {
+    using HooksByAddress = QMap<Address, HookFunction>;
+    using HooksByFunctionCode = QMap<FunctionCode, HooksByAddress>;
+
+    HooksByFunctionCode m_hooks;
     modbus_mapping_t *m_map = Q_NULLPTR;
 
 protected:
     AbstractSlaveBackend(modbus_t *ctx);
+
+    void customReply(const uint8_t *req, int req_length);
 
 public:
     ~AbstractSlaveBackend();
@@ -63,6 +73,8 @@ public:
 
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool initRegisterMap(int holdingRegistersCount, int inputRegistersCount);
+
+    void addHook(FunctionCode funcCode, Address address, HookFunction func);
 };
 
 }

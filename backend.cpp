@@ -1,4 +1,5 @@
 #include <cassert>
+#include <modbus/modbus-private.h>
 #include "backend.h"
 
 using namespace libmodbus_cpp;
@@ -20,6 +21,17 @@ AbstractSlaveBackend::AbstractSlaveBackend(modbus_t *ctx) :
 {
 }
 
+void AbstractSlaveBackend::customReply(const uint8_t *req, int req_length)
+{
+    int offset = getCtx()->backend->header_length;
+    FunctionCode function = req[offset];
+    Address address = (req[offset + 1] << 8) + req[offset + 2];
+
+    auto &hooks = m_hooks[function];
+    if (hooks.contains(address))
+        hooks[address]();
+}
+
 AbstractSlaveBackend::~AbstractSlaveBackend()
 {
     modbus_mapping_free(m_map);
@@ -34,4 +46,9 @@ bool AbstractSlaveBackend::initMap(int holdingBitsCount, int inputBitsCount, int
 bool AbstractSlaveBackend::initRegisterMap(int holdingRegistersCount, int inputRegistersCount)
 {
     return initMap(0, 0, holdingRegistersCount, inputRegistersCount);
+}
+
+void AbstractSlaveBackend::addHook(FunctionCode funcCode, Address address, HookFunction func)
+{
+    m_hooks[funcCode][address] = func;
 }

@@ -67,6 +67,7 @@ void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
         int messageLength = modbus_receive(getCtx(), buf);
         if (messageLength > 0) {
             qDebug() << "received:" << buf;
+            customReply(buf, messageLength);
             modbus_reply(getCtx(), buf, messageLength, getMap());
         } else if (messageLength == -1) {
             qDebug() << modbus_strerror(errno);
