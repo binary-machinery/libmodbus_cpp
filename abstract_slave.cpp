@@ -12,6 +12,11 @@ bool libmodbus_cpp::AbstractSlave::initMap(int holdingBitsCount, int inputBitsCo
     return getBackend()->initMap(holdingBitsCount, inputBitsCount, holdingRegistersCount, inputRegistersCount);
 }
 
+void libmodbus_cpp::AbstractSlave::addHook(libmodbus_cpp::FunctionCode funcCode, libmodbus_cpp::Address address, libmodbus_cpp::HookFunction func)
+{
+    getBackend()->addHook(funcCode, address, func);
+}
+
 void libmodbus_cpp::AbstractSlave::setValueToCoil(uint16_t address, bool value) {
     if (!getBackend()->getMap())
         throw LocalWriteError("map was not inited");
@@ -44,4 +49,13 @@ bool libmodbus_cpp::AbstractSlave::getValueFromDiscreteInput(uint16_t address)
     if (getBackend()->getMap()->nb_input_bits <= address)
         throw LocalReadError("wrong address");
     return getValueFromTable<bool>(getBackend()->getMap()->tab_input_bits, address);
+}
+
+libmodbus_cpp::AbstractSlave::ByteOrder libmodbus_cpp::AbstractSlave::checkSystemByteOrder()
+{
+    union {
+        unsigned short s;
+        unsigned char c[2];
+    } x { 0x0201 };
+    return (x.c[1] > x.c[0]) ? ByteOrder::LittleEndian : ByteOrder::BigEndian;
 }

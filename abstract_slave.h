@@ -3,6 +3,7 @@
 
 #include <QScopedPointer>
 #include <stdexcept>
+#include <iterator>
 #include "backend.h"
 #include "defs.h"
 
@@ -10,6 +11,13 @@ namespace libmodbus_cpp {
 
 class AbstractSlave
 {
+    enum class ByteOrder {
+        LittleEndian,
+        BigEndian
+    };
+
+    ByteOrder targetByteOrder = ByteOrder::BigEndian;
+    ByteOrder systemByteOrder = checkSystemByteOrder();
     QScopedPointer<AbstractSlaveBackend> m_backend;
 
 protected:
@@ -21,6 +29,8 @@ protected:
 
 public:
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
+
+    void addHook(FunctionCode funcCode, Address address, HookFunction func);
 
     void setValueToCoil(uint16_t address, bool value);
     bool getValueFromCoil(uint16_t address);
@@ -39,17 +49,33 @@ public:
     ValueType getValueFromInputRegister(uint16_t address);
 
 private:
+    static ByteOrder checkSystemByteOrder();
+
     template<typename ValueType, typename TableType>
     void setValueToTable(TableType *table, uint16_t address, const ValueType &value) {
         int offset = sizeof(TableType) * address;
-        std::memcpy(reinterpret_cast<uint8_t*>(table) + offset, &value, sizeof(ValueType));
+        if (targetByteOrder == systemByteOrder)
+            std::memcpy(reinterpret_cast<uint8_t*>(table) + offset, &value, sizeof(ValueType));
+        else {
+            const uint8_t *valueAsArray = reinterpret_cast<const uint8_t*>(&value);
+            int size = sizeof(ValueType);
+            for (int i = size - 1, j = 0; i >= 0; --i, ++j)
+                *(reinterpret_cast<uint8_t*>(table) + offset + j) = valueAsArray[i];
+        }
     }
 
     template<typename ValueType, typename TableType>
     ValueType getValueFromTable(TableType *table, uint16_t address) {
         ValueType res(0);
         int offset = sizeof(TableType) * address;
-        std::memcpy(&res, reinterpret_cast<uint8_t*>(table) + offset, sizeof(ValueType));
+        if (targetByteOrder == systemByteOrder)
+            std::memcpy(&res, reinterpret_cast<uint8_t*>(table) + offset, sizeof(ValueType));
+        else {
+            uint8_t *resAsArray = reinterpret_cast<uint8_t*>(&res);
+            int size = sizeof(ValueType);
+            for (int i = size - 1, j = 0; i >= 0; --i, ++j)
+                resAsArray[i] = *(reinterpret_cast<uint8_t*>(table) + offset + j);
+        }
         return res;
     }
 };
