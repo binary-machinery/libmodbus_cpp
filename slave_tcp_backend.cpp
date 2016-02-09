@@ -63,12 +63,12 @@ void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
         qDebug() << "Read from socket" << s->socketDescriptor();
         m_currentSocket = s;
         modbus_set_socket(getCtx(), s->socketDescriptor());
-        uint8_t buf[MODBUS_TCP_MAX_ADU_LENGTH];
-        int messageLength = modbus_receive(getCtx(), buf);
+        std::array<uint8_t, MODBUS_TCP_MAX_ADU_LENGTH> buf;
+        int messageLength = modbus_receive(getCtx(), buf.data());
         if (messageLength > 0) {
-            qDebug() << "received:" << buf;
-            customReply(buf, messageLength);
-            modbus_reply(getCtx(), buf, messageLength, getMap());
+            qDebug() << "received:" << buf.data();
+            customReply(buf.data(), messageLength);
+            modbus_reply(getCtx(), buf.data(), messageLength, getMap());
         } else if (messageLength == -1) {
             qDebug() << modbus_strerror(errno);
             removeSocket(s); // if it wasn't removed by slot already
