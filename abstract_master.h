@@ -35,6 +35,8 @@ public:
 
     template<typename ValueType>
     ValueType readInputRegister(uint16_t address);
+
+    QString readSlaveId();
 };
 
 template<typename ValueType>

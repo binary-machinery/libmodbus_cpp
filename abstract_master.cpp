@@ -1,4 +1,5 @@
 #include <cassert>
+#include <array>
 #include "abstract_master.h"
 
 libmodbus_cpp::AbstractMaster::AbstractMaster(AbstractBackend *backend) :
@@ -63,4 +64,13 @@ QVector<bool> libmodbus_cpp::AbstractMaster::readDiscreteInputs(uint16_t address
     QVector<bool> result(count);
     std::copy(rawData, rawData + count, result.begin());
     return result;
+}
+
+QString libmodbus_cpp::AbstractMaster::readSlaveId()
+{
+    std::array<char, 80> buf;
+    int errorCode = modbus_report_slave_id(getBackend()->getCtx(), buf.size(), reinterpret_cast<uint8_t*>(buf.data()));
+    if (errorCode == -1)
+        throw RemoteReadError(modbus_strerror(errno));
+    return QString(buf.data());
 }

@@ -24,8 +24,7 @@ enum class DataType {
     InputRegister
 };
 
-
-class AbstractSlaveBackend;
+// hooks ===================================================================
 using FunctionCode = uint8_t;
 using Address = uint16_t;
 using HookFunction = std::function<void(void)>;
