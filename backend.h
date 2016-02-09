@@ -39,6 +39,8 @@ inline void insertRegisterIntoValue_unsafe(int idx, ValueType &value, RegType re
 class AbstractBackend
 {
     modbus_t *m_ctx = Q_NULLPTR;
+    ByteOrder targetByteOrder = ByteOrder::BigEndian;
+    ByteOrder systemByteOrder = checkSystemByteOrder();
 
 protected:
     AbstractBackend(modbus_t *ctx);
@@ -49,6 +51,11 @@ public:
     inline modbus_t *getCtx() {
         return m_ctx;
     }
+
+    bool doesSystemByteOrderMatchTarget() const;
+
+private:
+    static ByteOrder checkSystemByteOrder();
 };
 
 class AbstractSlaveBackend : public AbstractBackend

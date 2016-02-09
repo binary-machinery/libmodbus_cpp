@@ -10,10 +10,24 @@ AbstractBackend::AbstractBackend(modbus_t *ctx) :
     assert(m_ctx);
 }
 
+bool AbstractBackend::doesSystemByteOrderMatchTarget() const
+{
+    return targetByteOrder == systemByteOrder;
+}
+
 AbstractBackend::~AbstractBackend()
 {
     modbus_close(m_ctx);
     modbus_free(m_ctx);
+}
+
+ByteOrder AbstractBackend::checkSystemByteOrder()
+{
+    union {
+        unsigned short s;
+        unsigned char c[2];
+    } x { 0x0201 };
+    return (x.c[1] > x.c[0]) ? ByteOrder::LittleEndian : ByteOrder::BigEndian;
 }
 
 AbstractSlaveBackend::AbstractSlaveBackend(modbus_t *ctx) :

@@ -50,12 +50,3 @@ bool libmodbus_cpp::AbstractSlave::getValueFromDiscreteInput(uint16_t address)
         throw LocalReadError("wrong address");
     return getValueFromTable<bool>(getBackend()->getMap()->tab_input_bits, address);
 }
-
-libmodbus_cpp::AbstractSlave::ByteOrder libmodbus_cpp::AbstractSlave::checkSystemByteOrder()
-{
-    union {
-        unsigned short s;
-        unsigned char c[2];
-    } x { 0x0201 };
-    return (x.c[1] > x.c[0]) ? ByteOrder::LittleEndian : ByteOrder::BigEndian;
-}

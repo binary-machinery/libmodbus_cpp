@@ -8,6 +8,11 @@
 
 namespace libmodbus_cpp {
 
+enum class ByteOrder {
+    LittleEndian,
+    BigEndian
+};
+
 enum class Mode {
     Master,
     Slave
