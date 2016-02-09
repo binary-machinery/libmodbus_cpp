@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <modbus/modbus.h>
 #include <functional>
+#include <QByteArray>
 
 namespace libmodbus_cpp {
 
@@ -22,6 +23,16 @@ enum class DataType {
     DiscreteInput,
     HoldingRegister,
     InputRegister
+};
+
+struct RawResult {
+    uint8_t address;
+    uint8_t functionCode;
+    QByteArray data;
+
+    bool isError() {
+        return (functionCode & 0x80);
+    }
 };
 
 // hooks ===================================================================

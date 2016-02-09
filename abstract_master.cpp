@@ -1,5 +1,6 @@
 #include <cassert>
 #include <array>
+#include <modbus/modbus-private.h>
 #include "abstract_master.h"
 
 libmodbus_cpp::AbstractMaster::AbstractMaster(AbstractBackend *backend) :
@@ -68,9 +69,28 @@ QVector<bool> libmodbus_cpp::AbstractMaster::readDiscreteInputs(uint16_t address
 
 QString libmodbus_cpp::AbstractMaster::readSlaveId()
 {
-    std::array<char, 80> buf;
-    int errorCode = modbus_report_slave_id(getBackend()->getCtx(), buf.size(), reinterpret_cast<uint8_t*>(buf.data()));
+    std::array<uint8_t, 80> buf = { 0 };
+    int errorCode = modbus_report_slave_id(getBackend()->getCtx(), buf.size(), buf.data());
     if (errorCode == -1)
         throw RemoteReadError(modbus_strerror(errno));
-    return QString(buf.data());
+    return QString(reinterpret_cast<const char*>(buf.data()));
+}
+
+libmodbus_cpp::RawResult libmodbus_cpp::AbstractMaster::sendRawRequest(uint8_t slaveId, uint8_t functionCode, const QVector<uint8_t> &data)
+{
+    QVector<uint8_t> req(2 + data.size());
+    req[0] = slaveId;
+    req[1] = functionCode;
+    std::copy(data.begin(), data.end(), req.begin() + 2);
+    int errorCode = modbus_send_raw_request(getBackend()->getCtx(), req.data(), req.size());
+    if (errorCode == -1)
+        throw RemoteWriteError(modbus_strerror(errno));
+    std::array<uint8_t, MODBUS_MAX_ADU_LENGTH> buf = { 0 };
+    errorCode = modbus_receive_confirmation(getBackend()->getCtx(), buf.data());
+    if (errorCode == -1)
+        throw RemoteReadError(modbus_strerror(errno));
+    int headerLength = getBackend()->getCtx()->backend->header_length;
+    uint8_t returnedAddress = buf[headerLength - 1];
+    uint8_t returnedFunctionCode = buf[headerLength];
+    return RawResult { returnedAddress, returnedFunctionCode, QByteArray(reinterpret_cast<const char*>(buf.data()) + headerLength + 2) };
 }
