@@ -37,7 +37,7 @@ AbstractSlaveBackend::AbstractSlaveBackend(modbus_t *ctx) :
 
 void AbstractSlaveBackend::checkHooks(const uint8_t *req, int req_length)
 {
-    int offset = getCtx()->backend->header_length;
+    int offset = modbus_get_header_length(getCtx());
     FunctionCode function = req[offset];
     Address address = (req[offset + 1] << 8) + req[offset + 2];
 

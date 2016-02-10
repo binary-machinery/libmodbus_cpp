@@ -1,6 +1,5 @@
 #include <cassert>
 #include <array>
-#include <modbus/modbus-private.h>
 #include "abstract_master.h"
 
 libmodbus_cpp::AbstractMaster::AbstractMaster(AbstractBackend *backend) :
@@ -89,7 +88,7 @@ libmodbus_cpp::RawResult libmodbus_cpp::AbstractMaster::sendRawRequest(uint8_t s
     errorCode = modbus_receive_confirmation(getBackend()->getCtx(), buf.data());
     if (errorCode == -1)
         throw RemoteReadError(modbus_strerror(errno));
-    int headerLength = getBackend()->getCtx()->backend->header_length;
+    int headerLength = modbus_get_header_length(getBackend()->getCtx());
     uint8_t returnedAddress = buf[headerLength - 1];
     uint8_t returnedFunctionCode = buf[headerLength];
     return RawResult { returnedAddress, returnedFunctionCode, QByteArray(reinterpret_cast<const char*>(buf.data()) + headerLength + 2) };
