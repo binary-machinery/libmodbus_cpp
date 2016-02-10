@@ -35,7 +35,7 @@ AbstractSlaveBackend::AbstractSlaveBackend(modbus_t *ctx) :
 {
 }
 
-void AbstractSlaveBackend::customReply(const uint8_t *req, int req_length)
+void AbstractSlaveBackend::checkHooks(const uint8_t *req, int req_length)
 {
     int offset = getCtx()->backend->header_length;
     FunctionCode function = req[offset];

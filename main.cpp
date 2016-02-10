@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     printInputRegisters(s);
     s->setValueToInputRegister(8, 0x12345678);
     printInputRegisters(s);
-    s->addHook(MODBUS_FC_READ_INPUT_REGISTERS, 8, [s, counter = 0x01010101]() mutable -> void {
+    s->addHook(MODBUS_FC_READ_INPUT_REGISTERS, 8, [s, counter = 0ull]() mutable -> void {
         s->setValueToInputRegister(8, ++counter);
         printInputRegisters(s);
     });

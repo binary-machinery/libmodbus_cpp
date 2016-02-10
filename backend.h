@@ -69,7 +69,7 @@ class AbstractSlaveBackend : public AbstractBackend
 protected:
     AbstractSlaveBackend(modbus_t *ctx);
 
-    void customReply(const uint8_t *req, int req_length);
+    void checkHooks(const uint8_t *req, int req_length);
 
 public:
     ~AbstractSlaveBackend();
