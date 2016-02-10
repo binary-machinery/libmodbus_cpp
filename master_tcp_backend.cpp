@@ -7,6 +7,7 @@ libmodbus_cpp::MasterTcpBackend::MasterTcpBackend(const char *address, int port)
 
 libmodbus_cpp::MasterTcpBackend::~MasterTcpBackend()
 {
+    disconnect();
 }
 
 bool libmodbus_cpp::MasterTcpBackend::connect()
