@@ -61,3 +61,5 @@ unix {
     target.path = /usr/local/lib/libmodbus_cpp
     INSTALLS += target
 }
+
+OTHER_FILES += libmodbus_cpp.prf
