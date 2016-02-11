@@ -15,29 +15,31 @@ CONFIG += c++14
 
 #LIBS += -lmodbus
 
+INCLUDEPATH += $${PWD}/src
+
 SOURCES += \
-    backend.cpp \
-    slave_tcp.cpp \
-    main.cpp \
-    abstract_slave.cpp \
-    backend_rtu.cpp \
+    src/backend.cpp \
+    src/slave_tcp.cpp \
+    src/main.cpp \
+    src/abstract_slave.cpp \
+    src/backend_rtu.cpp \
     tests/reg_map_read_write_test.cpp \
     modbus/modbus.c \
     modbus/modbus-data.c \
     modbus/modbus-rtu.c \
     modbus/modbus-tcp.c \
-    abstract_master.cpp \
-    slave_tcp_backend.cpp \
-    master_tcp_backend.cpp \
-    master_tcp.cpp \
+    src/abstract_master.cpp \
+    src/slave_tcp_backend.cpp \
+    src/master_tcp_backend.cpp \
+    src/master_tcp.cpp \
     tests/tcp_read_write_test.cpp \
-    factory.cpp
+    src/factory.cpp
 
 HEADERS += \
-    backend.h \
-    slave_tcp.h \
-    abstract_slave.h \
-    backend_rtu.h \
+    src/backend.h \
+    src/slave_tcp.h \
+    src/abstract_slave.h \
+    src/backend_rtu.h \
     tests/reg_map_read_write_test.h \
     modbus/config.h \
     modbus/modbus.h \
@@ -47,13 +49,13 @@ HEADERS += \
     modbus/modbus-tcp.h \
     modbus/modbus-tcp-private.h \
     modbus/modbus-version.h \
-    abstract_master.h \
-    slave_tcp_backend.h \
-    master_tcp_backend.h \
-    defs.h \
-    master_tcp.h \
+    src/abstract_master.h \
+    src/slave_tcp_backend.h \
+    src/master_tcp_backend.h \
+    src/defs.h \
+    src/master_tcp.h \
     tests/tcp_read_write_test.h \
-    factory.h
+    src/factory.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp
