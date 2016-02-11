@@ -1,5 +1,5 @@
-#ifndef ABSTRACTMASTER_H
-#define ABSTRACTMASTER_H
+#ifndef LIBMODBUS_CPP_ABSTRACTMASTER_H
+#define LIBMODBUS_CPP_ABSTRACTMASTER_H
 
 #include <QScopedPointer>
 #include <QVector>
@@ -70,4 +70,4 @@ ValueType AbstractMaster::readInputRegister(uint16_t address) {
 
 }
 
-#endif // ABSTRACTMASTER_H
+#endif // LIBMODBUS_CPP_ABSTRACTMASTER_H

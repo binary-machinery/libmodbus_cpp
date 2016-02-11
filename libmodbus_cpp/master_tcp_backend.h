@@ -1,5 +1,5 @@
-#ifndef MASTERTCPBACKEND_H
-#define MASTERTCPBACKEND_H
+#ifndef LIBMODBUS_CPP_MASTERTCPBACKEND_H
+#define LIBMODBUS_CPP_MASTERTCPBACKEND_H
 
 #include <QTcpSocket>
 #include "backend.h"
@@ -18,4 +18,4 @@ public:
 
 }
 
-#endif // MASTERTCPBACKEND_H
+#endif // LIBMODBUS_CPP_MASTERTCPBACKEND_H

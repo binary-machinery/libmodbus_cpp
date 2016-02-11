@@ -1,5 +1,5 @@
-#ifndef FACTORY_H
-#define FACTORY_H
+#ifndef LIBMODBUS_CPP_FACTORY_H
+#define LIBMODBUS_CPP_FACTORY_H
 
 #include "defs.h"
 
@@ -17,4 +17,4 @@ public:
 
 }
 
-#endif // FACTORY_H
+#endif // LIBMODBUS_CPP_FACTORY_H

@@ -1,5 +1,5 @@
-#ifndef SLAVETCPBACKEND_H
-#define SLAVETCPBACKEND_H
+#ifndef LIBMODBUS_CPP_SLAVETCPBACKEND_H
+#define LIBMODBUS_CPP_SLAVETCPBACKEND_H
 
 #include <QTcpServer>
 #include <QSet>
@@ -39,4 +39,4 @@ private:
 
 }
 
-#endif // SLAVETCPBACKEND_H
+#endif // LIBMODBUS_CPP_SLAVETCPBACKEND_H

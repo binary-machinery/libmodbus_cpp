@@ -1,5 +1,5 @@
-#ifndef DEFS_H
-#define DEFS_H
+#ifndef LIBMODBUS_CPP_DEFS_H
+#define LIBMODBUS_CPP_DEFS_H
 
 #include <stdexcept>
 #include <modbus/modbus.h>
@@ -73,5 +73,5 @@ public:
 
 }
 
-#endif // DEFS_H
+#endif // LIBMODBUS_CPP_DEFS_H
 

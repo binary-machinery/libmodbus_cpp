@@ -1,5 +1,5 @@
-#ifndef BACKENDRTU_H
-#define BACKENDRTU_H
+#ifndef LIBMODBUS_CPP_BACKENDRTU_H
+#define LIBMODBUS_CPP_BACKENDRTU_H
 
 #include "backend.h"
 
@@ -18,4 +18,4 @@ public:
 
 }
 
-#endif // BACKENDRTU_H
+#endif // LIBMODBUS_CPP_BACKENDRTU_H

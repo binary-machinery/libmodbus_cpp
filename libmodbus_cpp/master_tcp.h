@@ -1,5 +1,5 @@
-#ifndef MASTERTCP_H
-#define MASTERTCP_H
+#ifndef LIBMODBUS_CPP_MASTERTCP_H
+#define LIBMODBUS_CPP_MASTERTCP_H
 
 #include "abstract_master.h"
 #include "master_tcp_backend.h"
@@ -23,4 +23,4 @@ protected:
 
 }
 
-#endif // MASTERTCP_H
+#endif // LIBMODBUS_CPP_MASTERTCP_H

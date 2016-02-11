@@ -1,5 +1,5 @@
-#ifndef SLAVE_TCP_H
-#define SLAVE_TCP_H
+#ifndef LIBMODBUS_CPP_SLAVE_TCP_H
+#define LIBMODBUS_CPP_SLAVE_TCP_H
 
 #include <QTcpServer>
 #include <QSet>
@@ -26,4 +26,4 @@ public:
 
 }
 
-#endif // SLAVE_TCP_H
+#endif // LIBMODBUS_CPP_SLAVE_TCP_H

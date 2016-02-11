@@ -1,5 +1,5 @@
-#ifndef ABSTRACTSLAVE_H
-#define ABSTRACTSLAVE_H
+#ifndef LIBMODBUS_CPP_ABSTRACTSLAVE_H
+#define LIBMODBUS_CPP_ABSTRACTSLAVE_H
 
 #include <QScopedPointer>
 #include <stdexcept>
@@ -109,4 +109,4 @@ ValueType AbstractSlave::getValueFromInputRegister(uint16_t address) {
 
 }
 
-#endif // ABSTRACTSLAVE_H
+#endif // LIBMODBUS_CPP_ABSTRACTSLAVE_H

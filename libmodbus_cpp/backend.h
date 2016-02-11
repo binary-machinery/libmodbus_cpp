@@ -1,5 +1,5 @@
-#ifndef BACKEND_H
-#define BACKEND_H
+#ifndef LIBMODBUS_CPP_BACKEND_H
+#define LIBMODBUS_CPP_BACKEND_H
 
 #include <QObject>
 #include <QString>
@@ -86,4 +86,4 @@ public:
 
 }
 
-#endif // BACKEND_H
+#endif // LIBMODBUS_CPP_BACKEND_H
