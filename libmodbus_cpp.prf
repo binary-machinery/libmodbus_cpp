@@ -1,3 +1,13 @@
 QT += network
-CONFIG += c++14
 INCLUDEPATH += $${PWD}
+
+exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
+    include($${PWD}/../libmodbus_cpp_user_conf.pri)
+} else {
+    exists($${PWD}/libmodbus_cpp_user_conf.pri) {
+        include($${PWD}/libmodbus_cpp_user_conf.pri)
+    } else {
+        LIBMODBUS_CPP_TARGET_DIR = $${PWD}
+    }
+}
+LIBS += -L$${LIBMODBUS_CPP_TARGET_DIR} -llibmodbus_cpp

@@ -13,6 +13,17 @@ TEMPLATE = lib
 #TEMPLATE = app
 CONFIG += c++14
 
+exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
+    include($${PWD}/../libmodbus_cpp_user_conf.pri)
+} else {
+    exists($${PWD}/libmodbus_cpp_user_conf.pri) {
+        include($${PWD}/libmodbus_cpp_user_conf.pri)
+    } else {
+        LIBMODBUS_CPP_TARGET_DIR = $${PWD}
+    }
+}
+DESTDIR = $$LIBMODBUS_CPP_TARGET_DIR
+
 #LIBS += -lmodbus
 
 INCLUDEPATH += $${PWD}/libmodbus_cpp
