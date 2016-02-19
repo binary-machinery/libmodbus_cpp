@@ -39,7 +39,7 @@ inline void insertRegisterIntoValue_unsafe(int idx, ValueType &value, RegType re
 class AbstractBackend
 {
     modbus_t *m_ctx = Q_NULLPTR;
-    ByteOrder targetByteOrder = ByteOrder::BigEndian;
+    ByteOrder targetByteOrder = ByteOrder::LittleEndian;
     ByteOrder systemByteOrder = checkSystemByteOrder();
 
 protected:
@@ -72,7 +72,7 @@ protected:
     void checkHooks(const uint8_t *req, int req_length);
 
 public:
-    ~AbstractSlaveBackend();
+    ~AbstractSlaveBackend() override;
 
     inline modbus_mapping_t *getMap() {
         return m_map;

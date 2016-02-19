@@ -10,7 +10,7 @@ class MasterTcp : public AbstractMaster
 {
 public:
     MasterTcp(MasterTcpBackend *backend);
-    ~MasterTcp();
+    ~MasterTcp() override;
 
     bool connect();
     void disconnect();

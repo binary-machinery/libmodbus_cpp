@@ -44,12 +44,14 @@ void libmodbus_cpp::SlaveTcpBackend::stopListen()
 
 void libmodbus_cpp::SlaveTcpBackend::slot_processConnection()
 {
-    qDebug() << "Process connection";
+    if (m_verbose)
+        qDebug() << "Process connection";
     while (m_tcpServer.hasPendingConnections()) {
         QTcpSocket *s = m_tcpServer.nextPendingConnection();
         if (!s)
             continue;
-        qDebug() << "new socket:" << s->socketDescriptor();
+        if (m_verbose)
+            qDebug() << "new socket:" << s->socketDescriptor();
         connect(s, &QTcpSocket::readyRead, this, &SlaveTcpBackend::slot_readFromSocket);
         connect(s, &QTcpSocket::disconnected, this, &SlaveTcpBackend::slot_removeSocket);
         m_sockets.insert(s);
@@ -60,17 +62,20 @@ void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
 {
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s) {
-        qDebug() << "Read from socket" << s->socketDescriptor();
+        if (m_verbose)
+            qDebug() << "Read from socket" << s->socketDescriptor();
         m_currentSocket = s;
         modbus_set_socket(getCtx(), s->socketDescriptor());
         std::array<uint8_t, MODBUS_TCP_MAX_ADU_LENGTH> buf;
         int messageLength = modbus_receive(getCtx(), buf.data());
         if (messageLength > 0) {
-            qDebug() << "received:" << buf.data();
+            if (m_verbose)
+                qDebug() << "received:" << buf.data();
             checkHooks(buf.data(), messageLength);
             modbus_reply(getCtx(), buf.data(), messageLength, getMap());
         } else if (messageLength == -1) {
-            qDebug() << modbus_strerror(errno);
+            if (m_verbose)
+                qDebug() << modbus_strerror(errno);
             removeSocket(s); // if it wasn't removed by slot already
         }
     }
@@ -79,7 +84,8 @@ void libmodbus_cpp::SlaveTcpBackend::slot_readFromSocket()
 
 void libmodbus_cpp::SlaveTcpBackend::slot_removeSocket()
 {
-    qDebug() << "Remove socket";
+    if (m_verbose)
+        qDebug() << "Remove socket";
     QTcpSocket *s = dynamic_cast<QTcpSocket*>(sender());
     if (s)
         removeSocket(s);
@@ -88,7 +94,8 @@ void libmodbus_cpp::SlaveTcpBackend::slot_removeSocket()
 void libmodbus_cpp::SlaveTcpBackend::removeSocket(QTcpSocket *s)
 {
     if (m_sockets.contains(s)) {
-        qDebug() << "remove socket:" << s->socketDescriptor();
+        if (m_verbose)
+            qDebug() << "remove socket:" << s->socketDescriptor();
         m_sockets.remove(s);
         s->close();
         s->deleteLater();

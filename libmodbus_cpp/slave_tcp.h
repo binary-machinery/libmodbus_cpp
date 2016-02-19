@@ -13,7 +13,7 @@ class SlaveTcp : public AbstractSlave
 {
 public:
     SlaveTcp(SlaveTcpBackend *backend);
-    ~SlaveTcp();
+    ~SlaveTcp() override;
 
     bool startListen(int maxConnectionCount = 1);
     void stopListen();
