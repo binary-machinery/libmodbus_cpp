@@ -11,9 +11,6 @@ class MasterTcpBackend : public AbstractBackend
 public:
     MasterTcpBackend(const char *address, int port = MODBUS_TCP_DEFAULT_PORT);
     ~MasterTcpBackend();
-
-    bool connect();
-    void disconnect();
 };
 
 }

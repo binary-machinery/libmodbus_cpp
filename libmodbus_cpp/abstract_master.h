@@ -17,9 +17,10 @@ protected:
     virtual inline AbstractBackend *getBackend() {
         return m_backend.data();
     }
-    virtual ~AbstractMaster();
 
 public:
+    virtual ~AbstractMaster();
+
     bool readCoil(uint16_t address);
     QVector<bool> readCoils(uint16_t address, int count);
     void writeCoil(uint16_t address, bool value);
@@ -35,6 +36,9 @@ public:
 
     template<typename ValueType>
     ValueType readInputRegister(uint16_t address);
+
+    bool connect();
+    void disconnect();
 
     void setSlaveAddress(uint8_t address);
     QString readSlaveId();

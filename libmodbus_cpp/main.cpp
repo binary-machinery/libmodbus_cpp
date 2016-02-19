@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 
         libmodbus_cpp::TcpReadWriteTest t2;
         QTest::qExec(&t2);
-        return app.exec();
+        return 0;
     }
 
     QCoreApplication app(argc, argv);

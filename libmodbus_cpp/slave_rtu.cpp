@@ -11,10 +11,10 @@ libmodbus_cpp::SlaveRtu::~SlaveRtu()
 
 bool libmodbus_cpp::SlaveRtu::connect()
 {
-    return getBackend()->connect();
+    return getBackend()->openConnection();
 }
 
 void libmodbus_cpp::SlaveRtu::disconnect()
 {
-    getBackend()->disconnect();
+    getBackend()->closeConnection();
 }

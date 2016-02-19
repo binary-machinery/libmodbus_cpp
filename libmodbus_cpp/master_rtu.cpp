@@ -10,13 +10,3 @@ libmodbus_cpp::MasterRtu::~MasterRtu()
 {
 
 }
-
-bool libmodbus_cpp::MasterRtu::connect()
-{
-    return getBackend()->connect();
-}
-
-void libmodbus_cpp::MasterRtu::disconnect()
-{
-    getBackend()->disconnect();
-}

@@ -52,6 +52,9 @@ public:
         return m_ctx;
     }
 
+    bool openConnection();
+    void closeConnection();
+
     bool doesSystemByteOrderMatchTarget() const;
 
 private:

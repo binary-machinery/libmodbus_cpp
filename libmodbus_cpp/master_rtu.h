@@ -12,9 +12,6 @@ public:
     MasterRtu(MasterRtuBackend *backend);
     ~MasterRtu() override;
 
-    bool connect();
-    void disconnect();
-
 protected:
     inline MasterRtuBackend *getBackend() override {
         return static_cast<MasterRtuBackend*>(AbstractMaster::getBackend());

@@ -17,8 +17,18 @@ bool AbstractBackend::doesSystemByteOrderMatchTarget() const
 
 AbstractBackend::~AbstractBackend()
 {
-    modbus_close(m_ctx);
+    closeConnection();
     modbus_free(m_ctx);
+}
+
+bool AbstractBackend::openConnection()
+{
+    return (modbus_connect(getCtx()) == 0);
+}
+
+void AbstractBackend::closeConnection()
+{
+    modbus_close(getCtx());
 }
 
 ByteOrder AbstractBackend::checkSystemByteOrder()
@@ -37,6 +47,7 @@ AbstractSlaveBackend::AbstractSlaveBackend(modbus_t *ctx) :
 
 void AbstractSlaveBackend::checkHooks(const uint8_t *req, int req_length)
 {
+    Q_UNUSED(req_length);
     int offset = modbus_get_header_length(getCtx());
     FunctionCode function = req[offset];
     Address address = (req[offset + 1] << 8) + req[offset + 2];

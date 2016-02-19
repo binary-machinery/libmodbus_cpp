@@ -12,9 +12,6 @@ public:
     MasterTcp(MasterTcpBackend *backend);
     ~MasterTcp() override;
 
-    bool connect();
-    void disconnect();
-
 protected:
     inline MasterTcpBackend *getBackend() override {
         return static_cast<MasterTcpBackend*>(AbstractMaster::getBackend());
