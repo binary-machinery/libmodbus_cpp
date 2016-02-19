@@ -66,6 +66,11 @@ QVector<bool> libmodbus_cpp::AbstractMaster::readDiscreteInputs(uint16_t address
     return result;
 }
 
+void libmodbus_cpp::AbstractMaster::setSlaveAddress(uint8_t address)
+{
+    modbus_set_slave(getBackend()->getCtx(), address);
+}
+
 QString libmodbus_cpp::AbstractMaster::readSlaveId()
 {
     std::array<uint8_t, 80> buf = { 0 };

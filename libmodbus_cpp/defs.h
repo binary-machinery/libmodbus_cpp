@@ -23,6 +23,12 @@ enum class Type {
     RTU
 };
 
+enum class Parity : char {
+    None = 'N',
+    Even = 'E',
+    Odd = 'O'
+};
+
 enum class DataType {
     Coil,
     DiscreteInput,

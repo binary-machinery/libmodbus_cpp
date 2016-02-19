@@ -36,6 +36,7 @@ public:
     template<typename ValueType>
     ValueType readInputRegister(uint16_t address);
 
+    void setSlaveAddress(uint8_t address);
     QString readSlaveId();
     RawResult sendRawRequest(uint8_t slaveId, uint8_t functionCode, const QVector<uint8_t> &data = QVector<uint8_t>(0));
 };

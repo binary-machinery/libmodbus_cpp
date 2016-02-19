@@ -9,8 +9,8 @@ QT += network
 QT += testlib
 
 TARGET = libmodbus_cpp
-TEMPLATE = lib
-#TEMPLATE = app
+#TEMPLATE = lib
+TEMPLATE = app
 CONFIG += c++14
 
 exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
@@ -44,7 +44,11 @@ SOURCES += \
     libmodbus_cpp/master_tcp_backend.cpp \
     libmodbus_cpp/master_tcp.cpp \
     tests/tcp_read_write_test.cpp \
-    libmodbus_cpp/factory.cpp
+    libmodbus_cpp/factory.cpp \
+    libmodbus_cpp/slave_rtu.cpp \
+    libmodbus_cpp/slave_rtu_backend.cpp \
+    libmodbus_cpp/master_rtu_backend.cpp \
+    libmodbus_cpp/master_rtu.cpp
 
 HEADERS += \
     libmodbus_cpp/backend.h \
@@ -66,7 +70,11 @@ HEADERS += \
     libmodbus_cpp/defs.h \
     libmodbus_cpp/master_tcp.h \
     tests/tcp_read_write_test.h \
-    libmodbus_cpp/factory.h
+    libmodbus_cpp/factory.h \
+    libmodbus_cpp/slave_rtu.h \
+    libmodbus_cpp/slave_rtu_backend.h \
+    libmodbus_cpp/master_rtu_backend.h \
+    libmodbus_cpp/master_rtu.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp

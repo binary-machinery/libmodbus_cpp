@@ -22,8 +22,8 @@ protected:
 
 public:
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
-    bool setSlaveAddress(uint8_t address);
-    bool setDefaultSlaveAddress();
+    bool setAddress(uint8_t address);
+    bool setDefaultAddress();
     void addHook(FunctionCode funcCode, Address address, HookFunction func);
 
     void setValueToCoil(uint16_t address, bool value);
