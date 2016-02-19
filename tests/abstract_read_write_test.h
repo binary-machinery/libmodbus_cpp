@@ -3,46 +3,26 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
-#include <atomic>
-#include <QThreadPool>
 
 #include "factory.h"
 #include "slave_tcp.h"
 #include "master_tcp.h"
-
-class ServerStarter : public QRunnable {
-    std::atomic_bool m_ready { false };
-public:
-    void run() {
-        using namespace libmodbus_cpp;
-        QScopedPointer<SlaveTcp> s(Factory::createTcpSlave("127.0.0.1", 1502));
-        s->initMap(64, 64, 64, 64);
-        for (int i = 0; i < 64; ++i) {
-            s->setValueToCoil(i, (bool)(i & 1));
-            s->setValueToDiscreteInput(i, !(bool)(i & 1));
-            s->setValueToHoldingRegister(i, (uint16_t)1);
-            s->setValueToInputRegister(i, (uint16_t)1);
-        }
-        s->startListen(10);
-        m_ready = true;
-        QEventLoop().exec();
-    }
-    bool isReady() const {
-        return m_ready;
-    }
-};
+#include "slave_rtu.h"
+#include "master_rtu.h"
 
 namespace libmodbus_cpp {
 
-class TcpReadWriteTest : public QObject
+const int TABLE_SIZE = 64;
+
+class AbstractReadWriteTest : public QObject
 {
     Q_OBJECT
-    static const int TABLE_SIZE = 64;
-    QScopedPointer<ServerStarter> m_serverStarter;
-    QScopedPointer<libmodbus_cpp::MasterTcp> m_master;
+
+protected:
+    QScopedPointer<libmodbus_cpp::AbstractMaster> m_master;
 
 private slots:
-    void initTestCase();
+    virtual void initTestCase() = 0;
     void testConnection();
     void readCoils();
     void readVectorOfCoils();
@@ -80,7 +60,7 @@ private slots:
     void writeReadHoldingRegisters_int64();
     void writeReadHoldingRegisters_uint64();
     void writeReadHoldingRegisters_double();
-    void cleanupTestCase();
+    virtual void cleanupTestCase() = 0;
 
 private:
     void connect();

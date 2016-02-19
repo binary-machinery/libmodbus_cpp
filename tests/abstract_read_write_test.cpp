@@ -1,21 +1,12 @@
-#include "tcp_read_write_test.h"
+#include "abstract_read_write_test.h"
 
-void libmodbus_cpp::TcpReadWriteTest::initTestCase()
-{
-    m_serverStarter.reset(new ServerStarter);
-    QThreadPool::globalInstance()->start(m_serverStarter.data());
-    while (!m_serverStarter->isReady())
-        QThread::msleep(50);
-    m_master.reset(Factory::createTcpMaster("127.0.0.1", 1502));
-}
-
-void libmodbus_cpp::TcpReadWriteTest::testConnection()
+void libmodbus_cpp::AbstractReadWriteTest::testConnection()
 {
     connect();
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readCoils()
+void libmodbus_cpp::AbstractReadWriteTest::readCoils()
 {
     connect();
     int size = 1;
@@ -31,7 +22,7 @@ void libmodbus_cpp::TcpReadWriteTest::readCoils()
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readVectorOfCoils()
+void libmodbus_cpp::AbstractReadWriteTest::readVectorOfCoils()
 {
     connect();
     int size = 1;
@@ -48,7 +39,7 @@ void libmodbus_cpp::TcpReadWriteTest::readVectorOfCoils()
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeCoils()
+void libmodbus_cpp::AbstractReadWriteTest::writeCoils()
 {
     connect();
     int size = 1;
@@ -65,7 +56,7 @@ void libmodbus_cpp::TcpReadWriteTest::writeCoils()
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeVectorOfCoils()
+void libmodbus_cpp::AbstractReadWriteTest::writeVectorOfCoils()
 {
     connect();
     int size = 1;
@@ -83,7 +74,7 @@ void libmodbus_cpp::TcpReadWriteTest::writeVectorOfCoils()
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readDiscreteInputs()
+void libmodbus_cpp::AbstractReadWriteTest::readDiscreteInputs()
 {
     connect();
     for (int i = 0; i < TABLE_SIZE; ++i) {
@@ -98,7 +89,7 @@ void libmodbus_cpp::TcpReadWriteTest::readDiscreteInputs()
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readVectorOfDiscreteInputs()
+void libmodbus_cpp::AbstractReadWriteTest::readVectorOfDiscreteInputs()
 {
     connect();
     int size = 1;
@@ -115,168 +106,163 @@ void libmodbus_cpp::TcpReadWriteTest::readVectorOfDiscreteInputs()
     disconnect();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_int8()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_int8()
 {
     testReadFromInputRegisters<int8_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_uint8()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_uint8()
 {
     testReadFromInputRegisters<uint8_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_int16()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_int16()
 {
     testReadFromInputRegisters<int16_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_uint16()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_uint16()
 {
     testReadFromInputRegisters<uint16_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_int32()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_int32()
 {
     testReadFromInputRegisters<int32_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_uint32()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_uint32()
 {
     testReadFromInputRegisters<uint32_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_float()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_float()
 {
     testReadFromInputRegisters<float>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_int64()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_int64()
 {
     testReadFromInputRegisters<int64_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_uint64()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_uint64()
 {
     testReadFromInputRegisters<uint64_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readInputRegisters_double()
+void libmodbus_cpp::AbstractReadWriteTest::readInputRegisters_double()
 {
     testReadFromInputRegisters<double>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_int8()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_int8()
 {
     testReadFromHoldingRegisters<int8_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_uint8()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_uint8()
 {
     testReadFromHoldingRegisters<uint8_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_int16()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_int16()
 {
     testReadFromHoldingRegisters<int16_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_uint16()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_uint16()
 {
     testReadFromHoldingRegisters<uint16_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_int32()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_int32()
 {
     testReadFromHoldingRegisters<int32_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_uint32()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_uint32()
 {
     testReadFromHoldingRegisters<uint32_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_float()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_float()
 {
     testReadFromHoldingRegisters<float>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_int64()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_int64()
 {
     testReadFromHoldingRegisters<int64_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_uint64()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_uint64()
 {
     testReadFromHoldingRegisters<uint64_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::readHoldingRegisters_double()
+void libmodbus_cpp::AbstractReadWriteTest::readHoldingRegisters_double()
 {
     testReadFromHoldingRegisters<double>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_int8()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_int8()
 {
     testWriteToHoldingRegisters<int8_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_uint8()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_uint8()
 {
     testWriteToHoldingRegisters<uint8_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_int16()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_int16()
 {
     testWriteToHoldingRegisters<int16_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_uint16()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_uint16()
 {
     testWriteToHoldingRegisters<uint16_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_int32()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_int32()
 {
     testWriteToHoldingRegisters<int32_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_uint32()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_uint32()
 {
     testWriteToHoldingRegisters<uint32_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_float()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_float()
 {
     testWriteToHoldingRegisters<float>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_int64()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_int64()
 {
     testWriteToHoldingRegisters<int64_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_uint64()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_uint64()
 {
     testWriteToHoldingRegisters<uint64_t>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_double()
+void libmodbus_cpp::AbstractReadWriteTest::writeReadHoldingRegisters_double()
 {
     testWriteToHoldingRegisters<double>();
 }
 
-void libmodbus_cpp::TcpReadWriteTest::cleanupTestCase()
-{
-}
-
-void libmodbus_cpp::TcpReadWriteTest::connect()
+void libmodbus_cpp::AbstractReadWriteTest::connect()
 {
     bool masterConnected = m_master->connect();
     QCOMPARE(masterConnected, true);
 }
 
-void libmodbus_cpp::TcpReadWriteTest::disconnect()
+void libmodbus_cpp::AbstractReadWriteTest::disconnect()
 {
     m_master->disconnect();
-    //    m_slaveBackend->stopListen();
 }
