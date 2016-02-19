@@ -3,8 +3,15 @@
 
 void libmodbus_cpp::RtuReadWriteTest::initTestCase()
 {
+    QProcess::startDetached(
+                "socat",
+                QStringList()
+                << QString("pty,raw,link=") + TEST_SLAVE_SERIAL_DEVICE
+                << QString("pty,raw,link=") + TEST_MASTER_SERIAL_DEVICE,
+                ".",
+                &m_socatPid
+                );
     m_serverStarter = new RtuServerStarter;
-    QObject::connect(this, &RtuReadWriteTest::sig_finished, m_serverStarter, &RtuServerStarter::slot_stop, Qt::QueuedConnection);
     QThreadPool::globalInstance()->start(m_serverStarter);
     while (!m_serverStarter->isReady())
         QThread::msleep(50);
@@ -14,5 +21,7 @@ void libmodbus_cpp::RtuReadWriteTest::initTestCase()
 
 void libmodbus_cpp::RtuReadWriteTest::cleanupTestCase()
 {
-    emit sig_finished();
+    m_serverStarter->stop();
+    if (m_socatPid != 0)
+        QProcess::startDetached("kill", QStringList() << QString::number(m_socatPid));
 }

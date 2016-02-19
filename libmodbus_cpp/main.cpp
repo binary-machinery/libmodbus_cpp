@@ -27,11 +27,11 @@ int main(int argc, char *argv[])
 {
     if (RUN_TESTS) {
         QCoreApplication app(argc, argv);
-//        libmodbus_cpp::RegMapReadWriteTest t1;
-//        QTest::qExec(&t1);
+        libmodbus_cpp::RegMapReadWriteTest t1;
+        QTest::qExec(&t1);
 
-//        libmodbus_cpp::TcpReadWriteTest t2;
-//        QTest::qExec(&t2);
+        libmodbus_cpp::TcpReadWriteTest t2;
+        QTest::qExec(&t2);
 
         libmodbus_cpp::RtuReadWriteTest t3;
         QTest::qExec(&t3);

@@ -2,6 +2,7 @@
 #define RTUREADWRITETEST_H
 
 #include <QRunnable>
+#include <QProcess>
 #include <atomic>
 #include "abstract_read_write_test.h"
 #include "factory.h"
@@ -10,15 +11,13 @@
 namespace libmodbus_cpp {
 
 namespace {
-const char *TEST_SLAVE_SERIAL_DEVICE = "/home/prikhodko_ev/ttySimSlave";
-const char *TEST_MASTER_SERIAL_DEVICE = "/home/prikhodko_ev/ttySimMaster";
+const char *TEST_SLAVE_SERIAL_DEVICE = "./ttySimSlave";
+const char *TEST_MASTER_SERIAL_DEVICE = "./ttySimMaster";
 const int TEST_BAUD_RATE = 9600;
 const int TEST_SLAVE_ADDRESS = 1;
 }
 
-class RtuServerStarter : public QObject, public QRunnable {
-    Q_OBJECT
-
+class RtuServerStarter : public QRunnable {
     std::atomic_bool m_ready { false };
     QEventLoop *m_loop = nullptr;
 public:
@@ -39,12 +38,12 @@ public:
         m_loop = &loop;
         loop.exec();
     }
+
     bool isReady() const {
         return m_ready;
     }
 
-public slots:
-    void slot_stop() {
+    void stop() {
         if (m_loop)
             m_loop->exit(0);
     }
@@ -54,6 +53,7 @@ class RtuReadWriteTest : public AbstractReadWriteTest
 {
     Q_OBJECT
 
+    qint64 m_socatPid = 0;
     RtuServerStarter *m_serverStarter = nullptr;
 
 private slots:
