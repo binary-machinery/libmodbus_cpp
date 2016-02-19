@@ -3,8 +3,10 @@
 #include <QCoreApplication>
 #include "tests/reg_map_read_write_test.h"
 #include "tests/tcp_read_write_test.h"
+#include "tests/rtu_read_write_test.h"
 
 #include "slave_tcp.h"
+#include "slave_rtu.h"
 #include "factory.h"
 
 using namespace libmodbus_cpp;
@@ -19,38 +21,42 @@ using namespace libmodbus_cpp;
 //    }
 //}
 
-const bool RUN_TESTS = true;
+const bool RUN_TESTS = false;
 
 int main(int argc, char *argv[])
 {
     if (RUN_TESTS) {
         QCoreApplication app(argc, argv);
-        libmodbus_cpp::RegMapReadWriteTest t1;
-        QTest::qExec(&t1);
+//        libmodbus_cpp::RegMapReadWriteTest t1;
+//        QTest::qExec(&t1);
 
-        libmodbus_cpp::TcpReadWriteTest t2;
-        QTest::qExec(&t2);
+//        libmodbus_cpp::TcpReadWriteTest t2;
+//        QTest::qExec(&t2);
+
+        libmodbus_cpp::RtuReadWriteTest t3;
+        QTest::qExec(&t3);
         return 0;
     }
 
     QCoreApplication app(argc, argv);
-    SlaveTcp *s = Factory::createTcpSlave("127.0.0.1", 1502);
+//    SlaveTcp *s = Factory::createTcpSlave("127.0.0.1", 1502);
+    SlaveRtu *s = Factory::createRtuSlave("/home/prikhodko_ev/ttySimSlave", 9600);
     s->initMap(32, 32, 32, 32);
-//    s->setValueToInputRegister(8, 0x0102030405060708L);
+    s->setValueToInputRegister(8, 0x0102030405060708L);
 //    printInputRegisters(s);
-    s->setValueToInputRegister(8, 0x12345678);
+//    s->setValueToInputRegister(8, 0x12345678);
 //    printInputRegisters(s);
-    s->addHook(MODBUS_FC_READ_INPUT_REGISTERS, 8, [s, counter = 0ull]() mutable -> void {
-        s->setValueToInputRegister(8, ++counter);
-//        printInputRegisters(s);
-    });
+//    s->addHook(MODBUS_FC_READ_INPUT_REGISTERS, 8, [s, counter = 0ull]() mutable -> void {
+//        s->setValueToInputRegister(8, ++counter);
+////        printInputRegisters(s);
+//    });
 
     //    for (int i = 0; i < 32; ++i) {
     //        s.setValueToHoldingRegister(i, (short)(i + 1));
     //        s.setValueToInputRegister(i, (short)(i + 1));
     //    }
 
-    s->startListen(10);
+    s->startListen();
 
     return app.exec();
 }

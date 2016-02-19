@@ -18,16 +18,16 @@ libmodbus_cpp::SlaveTcp *libmodbus_cpp::Factory::createTcpSlave(const char *addr
     return s;
 }
 
-libmodbus_cpp::MasterRtu *libmodbus_cpp::Factory::createRtuMaster(const char *device, int baud, libmodbus_cpp::Parity parity, int dataBit, int stopBit)
+libmodbus_cpp::MasterRtu *libmodbus_cpp::Factory::createRtuMaster(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits)
 {
-    MasterRtuBackend *b = new MasterRtuBackend(device, baud, parity, dataBit, stopBit);
+    MasterRtuBackend *b = new MasterRtuBackend(device, baud, parity, dataBits, stopBits);
     MasterRtu *m = new MasterRtu(b);
     return m;
 }
 
-libmodbus_cpp::SlaveRtu *libmodbus_cpp::Factory::createRtuSlave(const char *device, int baud, libmodbus_cpp::Parity parity, int dataBit, int stopBit)
+libmodbus_cpp::SlaveRtu *libmodbus_cpp::Factory::createRtuSlave(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits)
 {
-    SlaveRtuBackend *b = new SlaveRtuBackend(device, baud, parity, dataBit, stopBit);
+    SlaveRtuBackend *b = new SlaveRtuBackend(device, baud, parity, dataBits, stopBits);
     SlaveRtu *s = new SlaveRtu(b);
     return s;
 }

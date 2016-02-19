@@ -12,6 +12,8 @@ namespace libmodbus_cpp {
 
 class SlaveTcpBackend : public QObject, public AbstractSlaveBackend {
     Q_OBJECT
+
+    int m_maxConnectionCount = 10;
     QTcpServer m_tcpServer;
     QSet<QTcpSocket*> m_sockets;
     const modbus_backend_t *m_originalBackend = nullptr;
@@ -19,11 +21,11 @@ class SlaveTcpBackend : public QObject, public AbstractSlaveBackend {
     bool m_verbose = false;
 
 public:
-    SlaveTcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT); // NULL for server to listen all
+    SlaveTcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT, int maxConnectionCount = 10); // NULL for server to listen all
     ~SlaveTcpBackend();
 
-    bool startListen(int maxConnectionCount = 1);
-    void stopListen();
+    bool startListen() override;
+    void stopListen() override;
 
 private slots:
     void slot_processConnection();

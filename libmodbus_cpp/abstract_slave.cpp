@@ -27,6 +27,16 @@ void libmodbus_cpp::AbstractSlave::addHook(libmodbus_cpp::FunctionCode funcCode,
     getBackend()->addHook(funcCode, address, func);
 }
 
+bool libmodbus_cpp::AbstractSlave::startListen()
+{
+    return getBackend()->startListen();
+}
+
+void libmodbus_cpp::AbstractSlave::stopListen()
+{
+    getBackend()->stopListen();
+}
+
 void libmodbus_cpp::AbstractSlave::setValueToCoil(uint16_t address, bool value) {
     if (!getBackend()->getMap())
         throw LocalWriteError("map was not inited");

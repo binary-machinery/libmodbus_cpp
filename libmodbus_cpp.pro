@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT -= gui
-QT += network
+QT += network serialport
 QT += testlib
 
 TARGET = libmodbus_cpp
@@ -48,7 +48,8 @@ SOURCES += \
     libmodbus_cpp/master_rtu_backend.cpp \
     libmodbus_cpp/master_rtu.cpp \
     tests/abstract_read_write_test.cpp \
-    tests/tcp_read_write_test.cpp
+    tests/tcp_read_write_test.cpp \
+    tests/rtu_read_write_test.cpp
 
 HEADERS += \
     libmodbus_cpp/backend.h \
@@ -74,7 +75,8 @@ HEADERS += \
     libmodbus_cpp/master_rtu_backend.h \
     libmodbus_cpp/master_rtu.h \
     tests/abstract_read_write_test.h \
-    tests/tcp_read_write_test.h
+    tests/tcp_read_write_test.h \
+    tests/rtu_read_write_test.h
 
 unix {
     target.path = /usr/local/lib/libmodbus_cpp

@@ -29,6 +29,18 @@ enum class Parity : char {
     Odd = 'O'
 };
 
+enum class DataBits {
+    b5 = 5,
+    b6 = 6,
+    b7 = 7,
+    b8 = 8
+};
+
+enum class StopBits {
+    b1 = 1,
+    b2 = 2
+};
+
 enum class DataType {
     Coil,
     DiscreteInput,
@@ -62,6 +74,11 @@ public:
 class RemoteWriteError : public RemoteRWError {
 public:
     RemoteWriteError(const std::string &msg) : RemoteRWError(msg) {}
+};
+
+class ConnectionError : public RemoteRWError {
+public:
+    ConnectionError(const std::string &msg) : RemoteRWError(msg) {}
 };
 
 using LocalRWError = std::logic_error;

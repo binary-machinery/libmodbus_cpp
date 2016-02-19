@@ -26,6 +26,9 @@ public:
     bool setDefaultAddress();
     void addHook(FunctionCode funcCode, Address address, HookFunction func);
 
+    bool startListen();
+    void stopListen();
+
     void setValueToCoil(uint16_t address, bool value);
     bool getValueFromCoil(uint16_t address);
 

@@ -1,20 +1,22 @@
-#ifndef TCPREADWRITETEST_H
-#define TCPREADWRITETEST_H
+#ifndef RTUREADWRITETEST_H
+#define RTUREADWRITETEST_H
 
 #include <QRunnable>
 #include <atomic>
 #include "abstract_read_write_test.h"
 #include "factory.h"
-#include "slave_tcp.h"
+#include "slave_rtu.h"
 
 namespace libmodbus_cpp {
 
 namespace {
-const char *TEST_IP_ADDRESS = "127.0.0.1";
-const int TEST_PORT = 1502;
+const char *TEST_SLAVE_SERIAL_DEVICE = "/home/prikhodko_ev/ttySimSlave";
+const char *TEST_MASTER_SERIAL_DEVICE = "/home/prikhodko_ev/ttySimMaster";
+const int TEST_BAUD_RATE = 9600;
+const int TEST_SLAVE_ADDRESS = 1;
 }
 
-class TcpServerStarter : public QObject, public QRunnable {
+class RtuServerStarter : public QObject, public QRunnable {
     Q_OBJECT
 
     std::atomic_bool m_ready { false };
@@ -22,7 +24,8 @@ class TcpServerStarter : public QObject, public QRunnable {
 public:
     void run() {
         using namespace libmodbus_cpp;
-        QScopedPointer<SlaveTcp> s(Factory::createTcpSlave(TEST_IP_ADDRESS, TEST_PORT));
+        QScopedPointer<SlaveRtu> s(Factory::createRtuSlave(TEST_SLAVE_SERIAL_DEVICE, TEST_BAUD_RATE));
+        s->setAddress(TEST_SLAVE_ADDRESS);
         s->initMap(TABLE_SIZE, TABLE_SIZE, TABLE_SIZE, TABLE_SIZE);
         for (int i = 0; i < TABLE_SIZE; ++i) {
             s->setValueToCoil(i, (bool)(i & 1));
@@ -47,14 +50,15 @@ public slots:
     }
 };
 
-class TcpReadWriteTest : public AbstractReadWriteTest
+class RtuReadWriteTest : public AbstractReadWriteTest
 {
     Q_OBJECT
-    TcpServerStarter *m_serverStarter = nullptr;
+
+    RtuServerStarter *m_serverStarter = nullptr;
 
 private slots:
-    void initTestCase() override;
-    void cleanupTestCase() override;
+    void initTestCase();
+    void cleanupTestCase();
 
 signals:
     void sig_finished();
@@ -62,4 +66,4 @@ signals:
 
 }
 
-#endif // TCPREADWRITETEST_H
+#endif // RTUREADWRITETEST_H

@@ -84,6 +84,9 @@ public:
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool initRegisterMap(int holdingRegistersCount, int inputRegistersCount);
 
+    virtual bool startListen() = 0;
+    virtual void stopListen() = 0;
+
     void addHook(FunctionCode funcCode, Address address, HookFunction func);
 };
 

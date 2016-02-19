@@ -23,7 +23,11 @@ AbstractBackend::~AbstractBackend()
 
 bool AbstractBackend::openConnection()
 {
-    return (modbus_connect(getCtx()) == 0);
+    int errorCode = modbus_connect(getCtx());
+    if (errorCode == 0)
+        return true;
+    else
+        throw ConnectionError(modbus_strerror(errno));
 }
 
 void AbstractBackend::closeConnection()

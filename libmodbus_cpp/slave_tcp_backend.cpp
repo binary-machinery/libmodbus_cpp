@@ -5,8 +5,9 @@
 
 QTcpSocket *libmodbus_cpp::SlaveTcpBackend::m_currentSocket = Q_NULLPTR;
 
-libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port) :
-    AbstractSlaveBackend(modbus_new_tcp(address, port))
+libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port, int maxConnectionCount) :
+    AbstractSlaveBackend(modbus_new_tcp(address, port)),
+    m_maxConnectionCount(maxConnectionCount)
 {
     m_originalBackend = getCtx()->backend;
     m_customBackend.reset(new modbus_backend_t);
@@ -23,10 +24,10 @@ libmodbus_cpp::SlaveTcpBackend::~SlaveTcpBackend()
     stopListen();
 }
 
-bool libmodbus_cpp::SlaveTcpBackend::startListen(int maxConnectionCount)
+bool libmodbus_cpp::SlaveTcpBackend::startListen()
 {
     qDebug() << "Start listen";
-    int serverSocket = modbus_tcp_listen(getCtx(), maxConnectionCount);
+    int serverSocket = modbus_tcp_listen(getCtx(), m_maxConnectionCount);
     if (serverSocket != -1) {
         m_tcpServer.setSocketDescriptor(serverSocket);
         connect(&m_tcpServer, &QTcpServer::newConnection, this, &SlaveTcpBackend::slot_processConnection);

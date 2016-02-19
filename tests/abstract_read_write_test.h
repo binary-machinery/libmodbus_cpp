@@ -4,11 +4,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-#include "factory.h"
-#include "slave_tcp.h"
-#include "master_tcp.h"
-#include "slave_rtu.h"
-#include "master_rtu.h"
+#include "abstract_master.h"
 
 namespace libmodbus_cpp {
 

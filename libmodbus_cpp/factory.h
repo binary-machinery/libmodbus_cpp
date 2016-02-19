@@ -15,8 +15,8 @@ class Factory
 public:
     static MasterTcp *createTcpMaster(const char *address, int port);
     static SlaveTcp *createTcpSlave(const char *address, int port);
-    static MasterRtu *createRtuMaster(const char *device, int baud, Parity parity = Parity::None, int dataBit = 8, int stopBit = 1);
-    static SlaveRtu *createRtuSlave(const char *device, int baud, Parity parity = Parity::None, int dataBit = 8, int stopBit = 1);
+    static MasterRtu *createRtuMaster(const char *device, int baud, Parity parity = Parity::None, DataBits dataBits = DataBits::b8, StopBits stopBits = StopBits::b1);
+    static SlaveRtu *createRtuSlave(const char *device, int baud, Parity parity = Parity::None, DataBits dataBits = DataBits::b8, StopBits stopBits = StopBits::b1);
 };
 
 }

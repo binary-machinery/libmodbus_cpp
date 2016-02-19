@@ -15,9 +15,6 @@ public:
     SlaveTcp(SlaveTcpBackend *backend);
     ~SlaveTcp() override;
 
-    bool startListen(int maxConnectionCount = 1);
-    void stopListen();
-
 protected:
     inline SlaveTcpBackend *getBackend() override {
         return static_cast<SlaveTcpBackend*>(AbstractSlave::getBackend());
