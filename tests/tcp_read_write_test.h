@@ -3,8 +3,34 @@
 
 #include <QObject>
 #include <QtTest/QtTest>
+#include <atomic>
+#include <QThreadPool>
+
+#include "factory.h"
 #include "slave_tcp.h"
 #include "master_tcp.h"
+
+class ServerStarter : public QRunnable {
+    std::atomic_bool m_ready { false };
+public:
+    void run() {
+        using namespace libmodbus_cpp;
+        QScopedPointer<SlaveTcp> s(Factory::createTcpSlave("127.0.0.1", 1502));
+        s->initMap(64, 64, 64, 64);
+        for (int i = 0; i < 64; ++i) {
+            s->setValueToCoil(i, (bool)(i & 1));
+            s->setValueToDiscreteInput(i, !(bool)(i & 1));
+            s->setValueToHoldingRegister(i, (uint16_t)1);
+            s->setValueToInputRegister(i, (uint16_t)1);
+        }
+        s->startListen(10);
+        m_ready = true;
+        QEventLoop().exec();
+    }
+    bool isReady() const {
+        return m_ready;
+    }
+};
 
 namespace libmodbus_cpp {
 
@@ -12,9 +38,8 @@ class TcpReadWriteTest : public QObject
 {
     Q_OBJECT
     static const int TABLE_SIZE = 64;
-    //    libmodbus_cpp::SlaveTcpBackend *m_slaveBackend = Q_NULLPTR;
-    //    libmodbus_cpp::SlaveTcp *m_slave = Q_NULLPTR;
-    libmodbus_cpp::MasterTcp *m_master = Q_NULLPTR;
+    QScopedPointer<ServerStarter> m_serverStarter;
+    QScopedPointer<libmodbus_cpp::MasterTcp> m_master;
 
 private slots:
     void initTestCase();

@@ -1,15 +1,12 @@
 #include "tcp_read_write_test.h"
-#include "factory.h"
 
 void libmodbus_cpp::TcpReadWriteTest::initTestCase()
 {
-    //        m_slaveBackend = new libmodbus_cpp::SlaveTcpBackend("127.0.0.1", 1502);
-    //        m_slaveBackend->initMap(TABLE_SIZE, TABLE_SIZE, TABLE_SIZE, TABLE_SIZE);
-    //        m_slave = new libmodbus_cpp::SlaveTcp(m_slaveBackend);
-
-    //        m_masterBackend = new libmodbus_cpp::MasterTcpBackend("127.0.0.1", 1502);
-    //        m_master = new libmodbus_cpp::MasterTcp(m_masterBackend);
-    m_master = Factory::createTcpMaster("127.0.0.1", 1502);
+    m_serverStarter.reset(new ServerStarter);
+    QThreadPool::globalInstance()->start(m_serverStarter.data());
+    while (!m_serverStarter->isReady())
+        QThread::msleep(50);
+    m_master.reset(Factory::createTcpMaster("127.0.0.1", 1502));
 }
 
 void libmodbus_cpp::TcpReadWriteTest::testConnection()
@@ -270,15 +267,10 @@ void libmodbus_cpp::TcpReadWriteTest::writeReadHoldingRegisters_double()
 
 void libmodbus_cpp::TcpReadWriteTest::cleanupTestCase()
 {
-    delete m_master;
-    //    delete m_slave;
 }
 
 void libmodbus_cpp::TcpReadWriteTest::connect()
 {
-    //    bool serverSocketCreated = m_slaveBackend->startListen(1);
-    //    QCOMPARE(serverSocketCreated, true);
-
     bool masterConnected = m_master->connect();
     QCOMPARE(masterConnected, true);
 }
