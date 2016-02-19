@@ -12,6 +12,16 @@ bool libmodbus_cpp::AbstractSlave::initMap(int holdingBitsCount, int inputBitsCo
     return getBackend()->initMap(holdingBitsCount, inputBitsCount, holdingRegistersCount, inputRegistersCount);
 }
 
+bool libmodbus_cpp::AbstractSlave::setSlaveAddress(uint8_t address)
+{
+    return (modbus_set_slave(getBackend()->getCtx(), address) != -1);
+}
+
+bool libmodbus_cpp::AbstractSlave::setDefaultSlaveAddress()
+{
+    return setSlaveAddress(MODBUS_TCP_SLAVE);
+}
+
 void libmodbus_cpp::AbstractSlave::addHook(libmodbus_cpp::FunctionCode funcCode, libmodbus_cpp::Address address, libmodbus_cpp::HookFunction func)
 {
     getBackend()->addHook(funcCode, address, func);

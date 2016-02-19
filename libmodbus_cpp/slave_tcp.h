@@ -18,7 +18,7 @@ public:
     bool startListen(int maxConnectionCount = 1);
     void stopListen();
 
-//protected:
+protected:
     inline SlaveTcpBackend *getBackend() override {
         return static_cast<SlaveTcpBackend*>(AbstractSlave::getBackend());
     }
