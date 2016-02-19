@@ -19,7 +19,7 @@ exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
     exists($${PWD}/libmodbus_cpp_user_conf.pri) {
         include($${PWD}/libmodbus_cpp_user_conf.pri)
     } else {
-        LIBMODBUS_CPP_TARGET_DIR = $${PWD}
+        LIBMODBUS_CPP_TARGET_DIR = $${PWD}/bin
     }
 }
 DESTDIR = $$LIBMODBUS_CPP_TARGET_DIR
