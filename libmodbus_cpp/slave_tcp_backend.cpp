@@ -15,7 +15,6 @@ libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port, i
     m_customBackend->select = customSelect;
     m_customBackend->recv = customRecv;
     getCtx()->backend = m_customBackend.data();
-    modbus_set_slave(getCtx(), 0xFF); // TODO
 }
 
 libmodbus_cpp::SlaveTcpBackend::~SlaveTcpBackend()

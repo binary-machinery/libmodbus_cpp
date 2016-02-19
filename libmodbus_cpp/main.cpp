@@ -21,7 +21,7 @@ using namespace libmodbus_cpp;
 //    }
 //}
 
-const bool RUN_TESTS = false;
+const bool RUN_TESTS = true;
 
 int main(int argc, char *argv[])
 {
@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
     QCoreApplication app(argc, argv);
 //    SlaveTcp *s = Factory::createTcpSlave("127.0.0.1", 1502);
     SlaveRtu *s = Factory::createRtuSlave("/home/prikhodko_ev/ttySimSlave", 9600);
+    s->setAddress(1);
     s->initMap(32, 32, 32, 32);
     s->setValueToInputRegister(8, 0x0102030405060708L);
 //    printInputRegisters(s);
