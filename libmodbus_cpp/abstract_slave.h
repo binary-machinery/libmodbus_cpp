@@ -18,9 +18,10 @@ protected:
     virtual inline AbstractSlaveBackend *getBackend() {
         return m_backend.data();
     }
-    virtual ~AbstractSlave() {}
 
 public:
+    virtual ~AbstractSlave() {}
+
     bool initMap(int holdingBitsCount, int inputBitsCount, int holdingRegistersCount, int inputRegistersCount);
     bool setAddress(uint8_t address);
     bool setDefaultAddress();
