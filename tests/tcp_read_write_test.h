@@ -11,7 +11,7 @@ namespace libmodbus_cpp {
 
 namespace {
 const char *TEST_IP_ADDRESS = "127.0.0.1";
-const int TEST_PORT = 1502;
+const int TEST_PORT = 1503;
 }
 
 class TcpServerStarter : public QObject, public QRunnable {

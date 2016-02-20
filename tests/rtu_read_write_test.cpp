@@ -11,6 +11,7 @@ void libmodbus_cpp::RtuReadWriteTest::initTestCase()
                 ".",
                 &m_socatPid
                 );
+    QThread::sleep(1); // wait a little for socat
     m_serverStarter = new RtuServerStarter;
     QThreadPool::globalInstance()->start(m_serverStarter);
     while (!m_serverStarter->isReady())
