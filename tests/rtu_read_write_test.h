@@ -12,7 +12,6 @@ namespace libmodbus_cpp {
 
 namespace {
 const char *TEST_SLAVE_SERIAL_DEVICE = "./ttySimSlave";
-const char *TEST_MASTER_SERIAL_DEVICE = "./ttySimMaster";
 const int TEST_BAUD_RATE = 9600;
 const int TEST_SLAVE_ADDRESS = 1;
 }

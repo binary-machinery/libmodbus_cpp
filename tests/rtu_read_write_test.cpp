@@ -1,6 +1,10 @@
 #include "tests/rtu_read_write_test.h"
 #include "master_rtu.h"
 
+namespace {
+const char *TEST_MASTER_SERIAL_DEVICE = "./ttySimMaster";
+}
+
 void libmodbus_cpp::RtuReadWriteTest::initTestCase()
 {
     QProcess::startDetached(
