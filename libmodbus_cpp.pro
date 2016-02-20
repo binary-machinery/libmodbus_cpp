@@ -9,8 +9,8 @@ QT += network serialport
 QT += testlib
 
 TARGET = libmodbus_cpp
-#TEMPLATE = lib
-TEMPLATE = app
+TEMPLATE = lib
+#TEMPLATE = app
 CONFIG += c++14
 
 exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
@@ -23,6 +23,7 @@ exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
     }
 }
 DESTDIR = $$LIBMODBUS_CPP_TARGET_DIR
+message($$DESTDIR)
 
 #LIBS += -lmodbus
 

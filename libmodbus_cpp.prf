@@ -1,4 +1,4 @@
-QT += network
+QT += network serialport
 INCLUDEPATH += $${PWD}
 
 exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
