@@ -1,5 +1,5 @@
-#ifndef SLAVERTUBACKEND_H
-#define SLAVERTUBACKEND_H
+#ifndef LIBMODBUS_CPP_SLAVERTUBACKEND_H
+#define LIBMODBUS_CPP_SLAVERTUBACKEND_H
 
 #include <QSerialPort>
 #include "backend.h"
@@ -34,4 +34,4 @@ private:
 
 }
 
-#endif // SLAVERTUBACKEND_H
+#endif // LIBMODBUS_CPP_SLAVERTUBACKEND_H

@@ -1,5 +1,5 @@
-#ifndef TCPREADWRITETEST_H
-#define TCPREADWRITETEST_H
+#ifndef LIBMODBUS_CPP_TCPREADWRITETEST_H
+#define LIBMODBUS_CPP_TCPREADWRITETEST_H
 
 #include <QRunnable>
 #include <atomic>

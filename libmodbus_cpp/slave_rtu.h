@@ -1,5 +1,5 @@
-#ifndef SLAVERTU_H
-#define SLAVERTU_H
+#ifndef LIBMODBUS_CPP_SLAVERTU_H
+#define LIBMODBUS_CPP_SLAVERTU_H
 
 #include "abstract_slave.h"
 #include "slave_rtu_backend.h"
@@ -23,4 +23,4 @@ protected:
 
 }
 
-#endif // SLAVERTU_H
+#endif // LIBMODBUS_CPP_SLAVERTU_H

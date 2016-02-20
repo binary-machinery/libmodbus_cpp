@@ -1,5 +1,5 @@
-#ifndef RTUREADWRITETEST_H
-#define RTUREADWRITETEST_H
+#ifndef LIBMODBUS_CPP_RTUREADWRITETEST_H
+#define LIBMODBUS_CPP_RTUREADWRITETEST_H
 
 #include <QRunnable>
 #include <QProcess>

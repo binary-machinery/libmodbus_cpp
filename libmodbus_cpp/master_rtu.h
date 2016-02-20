@@ -1,5 +1,5 @@
-#ifndef MASTERRTU_H
-#define MASTERRTU_H
+#ifndef LIBMODBUS_CPP_MASTERRTU_H
+#define LIBMODBUS_CPP_MASTERRTU_H
 
 #include "abstract_master.h"
 #include "master_rtu_backend.h"
@@ -20,4 +20,4 @@ protected:
 
 }
 
-#endif // MASTERRTU_H
+#endif // LIBMODBUS_CPP_MASTERRTU_H
