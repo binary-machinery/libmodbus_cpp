@@ -23,7 +23,6 @@ exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
     }
 }
 DESTDIR = $$LIBMODBUS_CPP_TARGET_DIR
-message($$DESTDIR)
 
 #LIBS += -lmodbus
 
