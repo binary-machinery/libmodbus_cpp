@@ -65,7 +65,7 @@ private:
     template<typename ValueType>
     void testReadFromInputRegisters() {
         connect();
-        int size = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
+        int size = std::max(sizeof(ValueType) / sizeof(uint16_t), static_cast<size_t>(1u));
         for (int i = 0; i < TABLE_SIZE; i += size) {
             ValueType valueBefore = 0;
             for (int j = 0; j < size; ++j)
@@ -83,7 +83,7 @@ private:
     template<typename ValueType>
     void testReadFromHoldingRegisters() {
         connect();
-        int size = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
+        int size = std::max(sizeof(ValueType) / sizeof(uint16_t), static_cast<size_t>(1u));
         for (int i = 0; i < TABLE_SIZE; i += size) {
             ValueType valueBefore = 0;
             for (int i = 0; i < size; ++i)
@@ -102,7 +102,7 @@ private:
     template<typename ValueType>
     void testWriteToHoldingRegisters() {
         connect();
-        int size = std::max(sizeof(ValueType) / sizeof(uint16_t), 1u);
+        int size = std::max(sizeof(ValueType) / sizeof(uint16_t), static_cast<size_t>(1u));
         for (int i = 0; i < TABLE_SIZE; i += size) {
             ValueType valueBefore = (ValueType)(rand()) + 1 / (double)rand();
             try {
