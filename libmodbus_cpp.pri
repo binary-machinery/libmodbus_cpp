@@ -11,4 +11,4 @@ exists($${LIBMODBUS_CPP_MAIN_CONF}): include($${LIBMODBUS_CPP_MAIN_CONF})
 exists($${LIBMODBUS_CPP_USER_CONF}): include($${LIBMODBUS_CPP_USER_CONF})
 
 QT += network serialport
-contains($$LIBMODBUS_CPP_CONFIG, libmodbus_cpp_tests): QT += testlib
+
