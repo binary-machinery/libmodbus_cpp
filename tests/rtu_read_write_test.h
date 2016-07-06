@@ -5,8 +5,8 @@
 #include <QProcess>
 #include <atomic>
 #include "abstract_read_write_test.h"
-#include "factory.h"
-#include "slave_rtu.h"
+#include <libmodbus_cpp/factory.h>
+#include <libmodbus_cpp/slave_rtu.h>
 
 namespace libmodbus_cpp {
 

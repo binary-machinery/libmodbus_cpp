@@ -1,6 +1,6 @@
 #include <modbus/modbus-private.h>
-#include "slave_tcp_backend.h"
-#include "errno.h"
+#include <libmodbus_cpp/slave_tcp_backend.h>
+#include <errno.h>
 
 
 QTcpSocket *libmodbus_cpp::SlaveTcpBackend::m_currentSocket = Q_NULLPTR;

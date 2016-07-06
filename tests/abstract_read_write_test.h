@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QtTest/QtTest>
 
-#include "abstract_master.h"
+#include <libmodbus_cpp/abstract_master.h>
 
 namespace libmodbus_cpp {
 

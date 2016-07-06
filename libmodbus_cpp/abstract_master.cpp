@@ -1,6 +1,6 @@
 #include <cassert>
 #include <array>
-#include "abstract_master.h"
+#include <libmodbus_cpp/abstract_master.h>
 
 libmodbus_cpp::AbstractMaster::AbstractMaster(AbstractBackend *backend) :
     m_backend(backend)

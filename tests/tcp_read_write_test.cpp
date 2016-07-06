@@ -1,6 +1,6 @@
 #include "tests/tcp_read_write_test.h"
 #include <QThreadPool>
-#include "master_tcp.h"
+#include <libmodbus_cpp/master_tcp.h>
 
 void libmodbus_cpp::TcpReadWriteTest::initTestCase()
 {

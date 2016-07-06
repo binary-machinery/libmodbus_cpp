@@ -1,5 +1,5 @@
 #include <cassert>
-#include "abstract_slave.h"
+#include <libmodbus_cpp/abstract_slave.h>
 
 libmodbus_cpp::AbstractSlave::AbstractSlave(AbstractSlaveBackend *backend) :
     m_backend(backend)
