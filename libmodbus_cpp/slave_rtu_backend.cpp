@@ -1,7 +1,7 @@
 #include <QMap>
 #include <QDebug>
 #include <modbus/modbus-private.h>
-#include "libmodbus_cpp/slave_rtu_backend.h"
+#include <libmodbus_cpp/slave_rtu_backend.h>
 
 QSerialPort *libmodbus_cpp::SlaveRtuBackend::m_staticPort = nullptr;
 

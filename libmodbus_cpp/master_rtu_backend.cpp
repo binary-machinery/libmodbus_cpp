@@ -1,4 +1,4 @@
-#include "libmodbus_cpp/master_rtu_backend.h"
+#include <libmodbus_cpp/master_rtu_backend.h>
 
 
 libmodbus_cpp::MasterRtuBackend::MasterRtuBackend(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits) :

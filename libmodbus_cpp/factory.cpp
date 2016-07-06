@@ -1,8 +1,8 @@
-#include "factory.h"
-#include "master_tcp.h"
-#include "slave_tcp.h"
-#include "master_rtu.h"
-#include "slave_rtu.h"
+#include <libmodbus_cpp/factory.h>
+#include <libmodbus_cpp/master_tcp.h>
+#include <libmodbus_cpp/slave_tcp.h>
+#include <libmodbus_cpp/master_rtu.h>
+#include <libmodbus_cpp/slave_rtu.h>
 
 libmodbus_cpp::MasterTcp *libmodbus_cpp::Factory::createTcpMaster(const char *address, int port)
 {

@@ -4,8 +4,8 @@
 #include <QRunnable>
 #include <atomic>
 #include "abstract_read_write_test.h"
-#include "factory.h"
-#include "slave_tcp.h"
+#include <libmodbus_cpp/factory.h>
+#include <libmodbus_cpp/slave_tcp.h>
 
 namespace libmodbus_cpp {
 

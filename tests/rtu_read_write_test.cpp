@@ -1,5 +1,5 @@
 #include "tests/rtu_read_write_test.h"
-#include "master_rtu.h"
+#include <libmodbus_cpp/master_rtu.h>
 
 namespace {
 const char *TEST_MASTER_SERIAL_DEVICE = "./ttySimMaster";

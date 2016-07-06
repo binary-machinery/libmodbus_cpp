@@ -1,4 +1,4 @@
-#include "libmodbus_cpp/slave_rtu.h"
+#include <libmodbus_cpp/slave_rtu.h>
 
 libmodbus_cpp::SlaveRtu::SlaveRtu(libmodbus_cpp::SlaveRtuBackend *backend) :
     AbstractSlave(backend)

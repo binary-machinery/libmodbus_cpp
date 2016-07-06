@@ -5,9 +5,9 @@
 #include "tests/tcp_read_write_test.h"
 #include "tests/rtu_read_write_test.h"
 
-#include "slave_tcp.h"
-#include "slave_rtu.h"
-#include "factory.h"
+#include <libmodbus_cpp/slave_tcp.h>
+#include <libmodbus_cpp/slave_rtu.h>
+#include <libmodbus_cpp/factory.h>
 
 using namespace libmodbus_cpp;
 
