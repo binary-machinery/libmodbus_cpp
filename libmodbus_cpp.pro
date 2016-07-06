@@ -33,11 +33,6 @@ SOURCES += \
     libmodbus_cpp/slave_tcp.cpp \
     libmodbus_cpp/main.cpp \
     libmodbus_cpp/abstract_slave.cpp \
-    tests/reg_map_read_write_test.cpp \
-    modbus/modbus.c \
-    modbus/modbus-data.c \
-    modbus/modbus-rtu.c \
-    modbus/modbus-tcp.c \
     libmodbus_cpp/abstract_master.cpp \
     libmodbus_cpp/slave_tcp_backend.cpp \
     libmodbus_cpp/master_tcp_backend.cpp \
@@ -47,6 +42,7 @@ SOURCES += \
     libmodbus_cpp/slave_rtu_backend.cpp \
     libmodbus_cpp/master_rtu_backend.cpp \
     libmodbus_cpp/master_rtu.cpp \
+    tests/reg_map_read_write_test.cpp \
     tests/abstract_read_write_test.cpp \
     tests/tcp_read_write_test.cpp \
     tests/rtu_read_write_test.cpp
@@ -55,15 +51,6 @@ HEADERS += \
     libmodbus_cpp/backend.h \
     libmodbus_cpp/slave_tcp.h \
     libmodbus_cpp/abstract_slave.h \
-    tests/reg_map_read_write_test.h \
-    modbus/config.h \
-    modbus/modbus.h \
-    modbus/modbus-private.h \
-    modbus/modbus-rtu.h \
-    modbus/modbus-rtu-private.h \
-    modbus/modbus-tcp.h \
-    modbus/modbus-tcp-private.h \
-    modbus/modbus-version.h \
     libmodbus_cpp/abstract_master.h \
     libmodbus_cpp/slave_tcp_backend.h \
     libmodbus_cpp/master_tcp_backend.h \
@@ -74,6 +61,7 @@ HEADERS += \
     libmodbus_cpp/slave_rtu_backend.h \
     libmodbus_cpp/master_rtu_backend.h \
     libmodbus_cpp/master_rtu.h \
+    tests/reg_map_read_write_test.h \
     tests/abstract_read_write_test.h \
     tests/tcp_read_write_test.h \
     tests/rtu_read_write_test.h
