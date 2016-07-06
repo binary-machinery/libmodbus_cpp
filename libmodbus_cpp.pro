@@ -5,28 +5,16 @@
 #-------------------------------------------------
 
 QT -= gui
-QT += network serialport
 QT += testlib
 
-TARGET = libmodbus_cpp
 TEMPLATE = lib
-#TEMPLATE = app
+
 CONFIG += c++14
 
-exists($${PWD}/../libmodbus_cpp_user_conf.pri) {
-    include($${PWD}/../libmodbus_cpp_user_conf.pri)
-} else {
-    exists($${PWD}/libmodbus_cpp_user_conf.pri) {
-        include($${PWD}/libmodbus_cpp_user_conf.pri)
-    } else {
-        LIBMODBUS_CPP_TARGET_DIR = $${PWD}/bin
-    }
-}
-DESTDIR = $$LIBMODBUS_CPP_TARGET_DIR
+include(libmodbus_cpp.pri)
 
-#LIBS += -lmodbus
-
-INCLUDEPATH += $${PWD}/libmodbus_cpp
+DESTDIR = $$LIBMODBUS_CPP_DESTDIR
+TARGET  = $$LIBMODBUS_CPP_TARGET
 
 SOURCES += \
     libmodbus_cpp/backend.cpp \
@@ -71,4 +59,6 @@ unix {
     INSTALLS += target
 }
 
-OTHER_FILES += libmodbus_cpp.prf
+OTHER_FILES += \
+    libmodbus_cpp.prf \
+    libmodbus_cpp_user_conf.pri.template
