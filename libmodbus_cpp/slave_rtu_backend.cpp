@@ -10,7 +10,7 @@ libmodbus_cpp::SlaveRtuBackend::SlaveRtuBackend(const char *device, int baud, li
 {
     m_serialPort.setPortName(device);
     m_serialPort.setBaudRate(baud);
-    Q_RELAXED_CONSTEXPR static QMap<Parity, QSerialPort::Parity> parityConvertionMap = {
+    static QMap<Parity, QSerialPort::Parity> parityConvertionMap = {
         { Parity::None, QSerialPort::NoParity },
         { Parity::Even, QSerialPort::EvenParity },
         { Parity::Odd, QSerialPort::OddParity }

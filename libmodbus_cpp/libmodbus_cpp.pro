@@ -8,7 +8,7 @@ QT -= gui
 
 TEMPLATE = lib
 
-CONFIG += c++14
+CONFIG += c++11
 
 include(../libmodbus_cpp.pri)
 
