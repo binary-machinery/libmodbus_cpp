@@ -47,8 +47,3 @@ HEADERS += \
     slave_rtu_backend.h \
     master_rtu_backend.h \
     master_rtu.h
-
-unix {
-    target.path = /usr/local/lib/libmodbus_cpp
-    INSTALLS += target
-}
