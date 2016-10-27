@@ -1,0 +1,5 @@
+include(../libmodbus_cpp.pri)
+
+INCLUDEPATH += $${PWD}
+QT += network serialport
+LIBS += -L$${LIBMODBUS_CPP_DESTDIR} -l$${LIBMODBUS_CPP_TARGET}

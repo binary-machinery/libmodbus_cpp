@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT -= gui
+QT += network serialport
 
 TEMPLATE = lib
 
@@ -47,3 +48,6 @@ HEADERS += \
     slave_rtu_backend.h \
     master_rtu_backend.h \
     master_rtu.h
+
+DISTFILES += \
+    libmodbus_cpp.prf
