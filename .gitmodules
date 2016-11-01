@@ -1,0 +1,3 @@
+[submodule "libmodbus/libmodbus"]
+	path = libmodbus/libmodbus
+	url = https://github.com/Fck-r-sns/libmodbus.git
