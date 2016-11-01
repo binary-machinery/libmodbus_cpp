@@ -22,7 +22,7 @@ class RtuServerStarter : public QRunnable {
 public:
     void run() {
         using namespace libmodbus_cpp;
-        QScopedPointer<SlaveRtu> s(Factory::createRtuSlave(TEST_SLAVE_SERIAL_DEVICE, TEST_BAUD_RATE));
+        QScopedPointer<SlaveRtu> s(Factory::createRtuSlave(TEST_SLAVE_SERIAL_DEVICE, TEST_BAUD_RATE).release());
         s->setAddress(TEST_SLAVE_ADDRESS);
         s->initMap(TABLE_SIZE, TABLE_SIZE, TABLE_SIZE, TABLE_SIZE);
         for (int i = 0; i < TABLE_SIZE; ++i) {

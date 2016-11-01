@@ -22,7 +22,7 @@ class TcpServerStarter : public QObject, public QRunnable {
 public:
     void run() {
         using namespace libmodbus_cpp;
-        QScopedPointer<SlaveTcp> s(Factory::createTcpSlave(TEST_IP_ADDRESS, TEST_PORT));
+        QScopedPointer<SlaveTcp> s(Factory::createTcpSlave(TEST_IP_ADDRESS, TEST_PORT).release());
         s->initMap(TABLE_SIZE, TABLE_SIZE, TABLE_SIZE, TABLE_SIZE);
         for (int i = 0; i < TABLE_SIZE; ++i) {
             s->setValueToCoil(i, (bool)(i & 1));

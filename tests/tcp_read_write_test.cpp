@@ -9,7 +9,7 @@ void libmodbus_cpp::TcpReadWriteTest::initTestCase()
     QThreadPool::globalInstance()->start(m_serverStarter);
     while (!m_serverStarter->isReady())
         QThread::msleep(50);
-    m_master.reset(Factory::createTcpMaster(TEST_IP_ADDRESS, TEST_PORT));
+    m_master.reset(Factory::createTcpMaster(TEST_IP_ADDRESS, TEST_PORT).release());
 }
 
 void libmodbus_cpp::TcpReadWriteTest::cleanupTestCase()

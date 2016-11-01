@@ -20,7 +20,7 @@ void libmodbus_cpp::RtuReadWriteTest::initTestCase()
     QThreadPool::globalInstance()->start(m_serverStarter);
     while (!m_serverStarter->isReady())
         QThread::msleep(50);
-    m_master.reset(Factory::createRtuMaster(TEST_MASTER_SERIAL_DEVICE, TEST_BAUD_RATE));
+    m_master.reset(Factory::createRtuMaster(TEST_MASTER_SERIAL_DEVICE, TEST_BAUD_RATE).release());
     m_master->setSlaveAddress(TEST_SLAVE_ADDRESS);
 }
 
