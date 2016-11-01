@@ -64,7 +64,8 @@ using Address = uint16_t;
 using HookFunction = std::function<void(void)>;
 
 // exceptions ==============================================================
-using RemoteRWError = std::runtime_error;
+using Exception = std::runtime_error;
+using RemoteRWError = Exception;
 
 class RemoteReadError : public RemoteRWError {
 public:
