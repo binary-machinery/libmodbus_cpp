@@ -10,6 +10,7 @@ include(../libmodbus_cpp.pri)
 DESTDIR = $$LIBMODBUS_CPP_DESTDIR
 TARGET  = $${LIBMODBUS_CPP_TARGET}_tests
 CONFIG += $$LIBMODBUS_CPP_CONFIG
+LIBS += $$LIBMODBUS_LIB
 
 SOURCES += \
     main.cpp \
