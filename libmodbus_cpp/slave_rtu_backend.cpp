@@ -11,7 +11,10 @@ libmodbus_cpp::SlaveRtuBackend::SlaveRtuBackend()
 
 libmodbus_cpp::SlaveRtuBackend::~SlaveRtuBackend()
 {
-    getCtx()->backend = m_originalBackend; // for normal deinit by libmodbus
+    auto ctx = getCtx();
+    if (ctx) {
+        ctx->backend = m_originalBackend; // for normal deinit by libmodbus
+    }
     stopListen();
 }
 

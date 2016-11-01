@@ -15,8 +15,10 @@ bool AbstractBackend::doesSystemByteOrderMatchTarget() const
 
 AbstractBackend::~AbstractBackend()
 {
-    closeConnection();
-    modbus_free(m_ctx);
+    if (m_ctx) {
+        closeConnection();
+        modbus_free(m_ctx);
+    }
 }
 
 void AbstractBackend::setCtx(modbus_t *ctx)
