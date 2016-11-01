@@ -4,34 +4,30 @@
 #include <libmodbus_cpp/master_rtu.h>
 #include <libmodbus_cpp/slave_rtu.h>
 
-libmodbus_cpp::MasterTcp *libmodbus_cpp::Factory::createTcpMaster(const char *address, int port)
+std::unique_ptr<libmodbus_cpp::MasterTcp> libmodbus_cpp::Factory::createTcpMaster(const char *address, int port)
 {
-    MasterTcpBackend *b = new MasterTcpBackend();
+    std::unique_ptr<MasterTcpBackend> b(new MasterTcpBackend());
     b->init(address, port);
-    MasterTcp *m = new MasterTcp(b);
-    return m;
+    return std::unique_ptr<MasterTcp>(new MasterTcp(b.release()));
 }
 
-libmodbus_cpp::SlaveTcp *libmodbus_cpp::Factory::createTcpSlave(const char *address, int port)
+std::unique_ptr<libmodbus_cpp::SlaveTcp> libmodbus_cpp::Factory::createTcpSlave(const char *address, int port)
 {
-    SlaveTcpBackend *b = new SlaveTcpBackend();
+    std::unique_ptr<SlaveTcpBackend> b(new SlaveTcpBackend());
     b->init(address, port);
-    SlaveTcp *s = new SlaveTcp(b);
-    return s;
+    return std::unique_ptr<SlaveTcp>(new SlaveTcp(b.release()));
 }
 
-libmodbus_cpp::MasterRtu *libmodbus_cpp::Factory::createRtuMaster(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits)
+std::unique_ptr<libmodbus_cpp::MasterRtu> libmodbus_cpp::Factory::createRtuMaster(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits)
 {
-    MasterRtuBackend *b = new MasterRtuBackend();
+    std::unique_ptr<MasterRtuBackend> b(new MasterRtuBackend());
     b->init(device, baud, parity, dataBits, stopBits);
-    MasterRtu *m = new MasterRtu(b);
-    return m;
+    return std::unique_ptr<MasterRtu>(new MasterRtu(b.release()));
 }
 
-libmodbus_cpp::SlaveRtu *libmodbus_cpp::Factory::createRtuSlave(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits)
+std::unique_ptr<libmodbus_cpp::SlaveRtu> libmodbus_cpp::Factory::createRtuSlave(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits)
 {
-    SlaveRtuBackend *b = new SlaveRtuBackend();
+    std::unique_ptr<SlaveRtuBackend> b(new SlaveRtuBackend());
     b->init(device, baud, parity, dataBits, stopBits);
-    SlaveRtu *s = new SlaveRtu(b);
-    return s;
+    return std::unique_ptr<SlaveRtu>(new SlaveRtu(b.release()));
 }
