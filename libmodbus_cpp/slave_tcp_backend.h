@@ -21,9 +21,10 @@ class SlaveTcpBackend : public QObject, public AbstractSlaveBackend {
     bool m_verbose = false;
 
 public:
-    SlaveTcpBackend(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT, int maxConnectionCount = 10); // NULL for server to listen all
+    SlaveTcpBackend();
     ~SlaveTcpBackend();
 
+    void init(const char *address = NULL, int port = MODBUS_TCP_DEFAULT_PORT, int maxConnectionCount = 10); // NULL for server to listen all
     bool startListen() override;
     void stopListen() override;
 

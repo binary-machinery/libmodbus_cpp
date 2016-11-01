@@ -5,9 +5,24 @@
 
 QSerialPort *libmodbus_cpp::SlaveRtuBackend::m_staticPort = nullptr;
 
-libmodbus_cpp::SlaveRtuBackend::SlaveRtuBackend(const char *device, int baud, libmodbus_cpp::Parity parity, DataBits dataBits, StopBits stopBits) :
-    AbstractSlaveBackend(modbus_new_rtu(device, baud, (char)parity, (int)dataBits, (int)stopBits))
+libmodbus_cpp::SlaveRtuBackend::SlaveRtuBackend()
 {
+}
+
+libmodbus_cpp::SlaveRtuBackend::~SlaveRtuBackend()
+{
+    getCtx()->backend = m_originalBackend; // for normal deinit by libmodbus
+    stopListen();
+}
+
+void libmodbus_cpp::SlaveRtuBackend::init(const char *device, int baud, libmodbus_cpp::Parity parity, libmodbus_cpp::DataBits dataBits, libmodbus_cpp::StopBits stopBits)
+{
+    modbus_t *ctx = modbus_new_rtu(device, baud, (char)parity, (int)dataBits, (int)stopBits);
+    if (!ctx) {
+        throw Exception(std::string("Failed to create RTU context: ") + modbus_strerror(errno));
+    }
+    setCtx(ctx);
+
     m_serialPort.setPortName(device);
     m_serialPort.setBaudRate(baud);
     static QMap<Parity, QSerialPort::Parity> parityConvertionMap = {
@@ -25,12 +40,6 @@ libmodbus_cpp::SlaveRtuBackend::SlaveRtuBackend(const char *device, int baud, li
     m_customBackend->select = customSelect;
     m_customBackend->recv = customRecv;
     getCtx()->backend = m_customBackend.data();
-}
-
-libmodbus_cpp::SlaveRtuBackend::~SlaveRtuBackend()
-{
-    getCtx()->backend = m_originalBackend; // for normal deinit by libmodbus
-    stopListen();
 }
 
 bool libmodbus_cpp::SlaveRtuBackend::startListen()

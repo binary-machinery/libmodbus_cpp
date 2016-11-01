@@ -43,10 +43,12 @@ class AbstractBackend
     ByteOrder systemByteOrder = checkSystemByteOrder();
 
 protected:
-    AbstractBackend(modbus_t *ctx);
+    AbstractBackend();
 
 public:
     virtual ~AbstractBackend();
+
+    void setCtx(modbus_t *ctx);
 
     inline modbus_t *getCtx() {
         return m_ctx;
@@ -70,7 +72,7 @@ class AbstractSlaveBackend : public AbstractBackend
     modbus_mapping_t *m_map = Q_NULLPTR;
 
 protected:
-    AbstractSlaveBackend(modbus_t *ctx);
+    AbstractSlaveBackend();
 
     void checkHooks(const uint8_t *req, int req_length);
 

@@ -9,8 +9,10 @@ namespace libmodbus_cpp {
 class MasterTcpBackend : public AbstractBackend
 {
 public:
-    MasterTcpBackend(const char *address, int port = MODBUS_TCP_DEFAULT_PORT);
+    MasterTcpBackend();
     ~MasterTcpBackend();
+
+    void init(const char *address, int port = MODBUS_TCP_DEFAULT_PORT);
 };
 
 }

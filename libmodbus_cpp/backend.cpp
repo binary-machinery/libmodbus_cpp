@@ -4,10 +4,8 @@
 
 using namespace libmodbus_cpp;
 
-AbstractBackend::AbstractBackend(modbus_t *ctx) :
-    m_ctx(ctx)
+AbstractBackend::AbstractBackend()
 {
-    assert(m_ctx);
 }
 
 bool AbstractBackend::doesSystemByteOrderMatchTarget() const
@@ -19,6 +17,11 @@ AbstractBackend::~AbstractBackend()
 {
     closeConnection();
     modbus_free(m_ctx);
+}
+
+void AbstractBackend::setCtx(modbus_t *ctx)
+{
+    m_ctx = ctx;
 }
 
 bool AbstractBackend::openConnection()
@@ -44,8 +47,7 @@ ByteOrder AbstractBackend::checkSystemByteOrder()
     return (x.c[1] > x.c[0]) ? ByteOrder::LittleEndian : ByteOrder::BigEndian;
 }
 
-AbstractSlaveBackend::AbstractSlaveBackend(modbus_t *ctx) :
-    AbstractBackend(ctx)
+AbstractSlaveBackend::AbstractSlaveBackend()
 {
 }
 

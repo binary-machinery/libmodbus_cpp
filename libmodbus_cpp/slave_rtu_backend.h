@@ -17,8 +17,10 @@ class SlaveRtuBackend : public QObject, public AbstractSlaveBackend
     bool m_verbose = false;
 
 public:
-    SlaveRtuBackend(const char *device, int baud, Parity parity = Parity::None, DataBits dataBits = DataBits::b8, StopBits stopBits = StopBits::b1);
+    SlaveRtuBackend();
     ~SlaveRtuBackend() override;
+
+    void init(const char *device, int baud, Parity parity = Parity::None, DataBits dataBits = DataBits::b8, StopBits stopBits = StopBits::b1);
 
     bool startListen() override;
     void stopListen() override;

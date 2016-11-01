@@ -5,22 +5,30 @@
 
 QTcpSocket *libmodbus_cpp::SlaveTcpBackend::m_currentSocket = Q_NULLPTR;
 
-libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend(const char *address, int port, int maxConnectionCount) :
-    AbstractSlaveBackend(modbus_new_tcp(address, port)),
-    m_maxConnectionCount(maxConnectionCount)
+libmodbus_cpp::SlaveTcpBackend::SlaveTcpBackend()
 {
-    m_originalBackend = getCtx()->backend;
-    m_customBackend.reset(new modbus_backend_t);
-    std::memcpy(m_customBackend.data(), m_originalBackend, sizeof(*m_customBackend));
-    m_customBackend->select = customSelect;
-    m_customBackend->recv = customRecv;
-    getCtx()->backend = m_customBackend.data();
 }
 
 libmodbus_cpp::SlaveTcpBackend::~SlaveTcpBackend()
 {
     getCtx()->backend = m_originalBackend; // for normal deinit by libmodbus
     stopListen();
+}
+
+void libmodbus_cpp::SlaveTcpBackend::init(const char *address, int port, int maxConnectionCount)
+{
+    m_maxConnectionCount = maxConnectionCount;
+    modbus_t *ctx = modbus_new_tcp(address, port);
+    if (!ctx) {
+        throw Exception(std::string("Failed to create TCP context: ") + modbus_strerror(errno));
+    }
+    setCtx(ctx);
+    m_originalBackend = getCtx()->backend;
+    m_customBackend.reset(new modbus_backend_t);
+    std::memcpy(m_customBackend.data(), m_originalBackend, sizeof(*m_customBackend));
+    m_customBackend->select = customSelect;
+    m_customBackend->recv = customRecv;
+    getCtx()->backend = m_customBackend.data();
 }
 
 bool libmodbus_cpp::SlaveTcpBackend::startListen()
