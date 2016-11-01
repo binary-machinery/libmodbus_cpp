@@ -2,7 +2,11 @@ TEMPLATE = subdirs
 
 include(libmodbus_cpp.pri)
 
-SUBDIRS += libmodbus_cpp
+SUBDIRS += \
+    libmodbus \
+    libmodbus_cpp \
+
+libmodbus_cpp.depends = libmodbus
 
 contains(LIBMODBUS_CPP_CONFIG, libmodbus_cpp_tests) {
     SUBDIRS += tests
@@ -11,4 +15,5 @@ contains(LIBMODBUS_CPP_CONFIG, libmodbus_cpp_tests) {
 
 OTHER_FILES += \
     libmodbus_cpp.prf \
+    libmodbus_cpp_user_conf.pri \
     libmodbus_cpp_user_conf.pri.template
